@@ -86,7 +86,9 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** tela de configurações (nome, endereço, telefone, slug somente leitura pós-criação); CRUD de turnos com label, dia da semana e horários.
 **Aceite:** critério do PRD — gestor configura turnos de sábado e domingo em < 5 min sem ajuda (validar com usuário real ou cronometrar o fluxo).
 
-### [ ] M0-T4 — Convite de usuários e papéis
+> **Pendência de fechamento do M0** (12/06/2026): seed de demonstração (NF-8) e instrumentação dos eventos PostHog do marco (`tenant_created`, `onboarding_completed`) deferidos para o início do M1 — executar antes da M1-T1.
+
+### [x] M0-T4 — Convite de usuários e papéis
 **RNs:** RN-1.2, RN-1.3.
 **Entregáveis:** convite por e-mail (Supabase Auth invite) com papel; listagem/remoção de membros; guards: recepcionista só `/checkin`.
 **Aceite:** critério do PRD — recepcionista convidado não acessa nenhuma rota além do check-in (teste e2e + teste de RLS).

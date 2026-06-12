@@ -5,11 +5,20 @@ import { createClient } from "@/lib/supabase/server";
 
 export type AuthFormState = { error: string } | null;
 
-/** Pós-login: com tenant vai para o painel; sem tenant, para o onboarding. */
+/** Pós-login: gestor → painel; recepcionista → check-in; sem tenant → onboarding. */
 async function redirectByMembership(): Promise<never> {
   const supabase = await createClient();
-  const { data } = await supabase.from("memberships").select("id").limit(1);
-  redirect(data && data.length > 0 ? "/app" : "/onboarding");
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  // Filtrar pelo próprio user_id: a RLS permite ver memberships do tenant
+  // inteiro, e o papel dos OUTROS não pode decidir o destino.
+  const { data } = await supabase
+    .from("memberships")
+    .select("role")
+    .eq("user_id", user!.id);
+  if (!data || data.length === 0) redirect("/onboarding");
+  redirect(data.some((m) => m.role === "manager") ? "/app" : "/checkin");
 }
 
 export async function signUp(

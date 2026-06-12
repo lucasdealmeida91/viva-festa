@@ -188,11 +188,13 @@ describe("memberships — visibilidade por tenant (RN-1.2)", () => {
 });
 
 describe("profiles — privacidade e privilégio (NF-4)", () => {
-  it("usuário vê apenas o próprio perfil", async () => {
+  it("usuário vê apenas perfis do próprio tenant (M0-T4)", async () => {
     const client = await signInAs(emails.managerA);
     const { data, error } = await client.from("profiles").select("user_id");
     expect(error).toBeNull();
-    expect(data).toHaveLength(1);
+    // próprio + recepcionista do tenant A; nunca o gestor do tenant B
+    expect(data).toHaveLength(2);
+    expect(data!.map((p) => p.user_id)).not.toContain(userIds[2]);
   });
 
   it("usuário não consegue se tornar admin da plataforma", async () => {
