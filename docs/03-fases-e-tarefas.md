@@ -62,7 +62,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** **criar projeto "VivaFesta" na org SLJC do PostHog**; wrapper `lib/analytics/` com allowlist de propriedades ([06-observabilidade.md](06-observabilidade.md) §2); keys por ambiente.
 **Aceite:** evento de teste aparece no PostHog; propriedade fora da allowlist é descartada.
 
-### [ ] F0-T7 — Migration inicial + harness de isolamento
+### [x] F0-T7 — Migration inicial + harness de isolamento
 **Objetivo:** base multi-tenant com RLS e o teste de isolamento que acompanhará todos os marcos (NF-1).
 **Entregáveis:** migration com `tenants`, `profiles`, `memberships`, funções `private.*` ([02-modelo-de-dados.md](02-modelo-de-dados.md) §3); helper de teste que cria 2 tenants + usuários e verifica vazamento cruzado.
 **Aceite:** teste de isolamento passa; tentativa de SELECT cross-tenant retorna vazio (não erro).

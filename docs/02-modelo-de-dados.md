@@ -179,6 +179,7 @@ Todas `security definer`, com `search_path` fixado, validando token + slug junto
 ## 4. Migrations e tipos
 
 - Migrations versionadas pelo Supabase CLI em `supabase/migrations/` (fluxo no [07-setup.md](07-setup.md)).
+- **Toda migration que cria tabela deve conceder grants explícitos** (`service_role` DML completo; `anon`/`authenticated` conforme a matriz §3): a imagem atual do Postgres **não** concede DML automático em tabelas novas — sem grant, até o service role recebe "permission denied". Ver exemplo na migration `initial_tenants`.
 - Tipos TypeScript gerados: `npm run db:types` → `lib/supabase/database.types.ts` (commitado).
 - Ordem de criação acompanha as fases do [03-fases-e-tarefas.md](03-fases-e-tarefas.md) — nada de criar o schema inteiro no dia 1.
 

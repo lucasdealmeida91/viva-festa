@@ -34,7 +34,116 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      memberships: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["membership_role"]
+          tenant_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["membership_role"]
+          tenant_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["membership_role"]
+          tenant_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memberships_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string
+          is_platform_admin: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          full_name: string
+          is_platform_admin?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          is_platform_admin?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tenants: {
+        Row: {
+          address: string | null
+          block_at: string | null
+          created_at: string
+          delete_at: string | null
+          id: string
+          name: string
+          phone: string | null
+          read_only_since: string | null
+          rebooking_message: string | null
+          slug: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          subscription_status: Database["public"]["Enums"]["subscription_status"]
+          trial_ends_at: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          block_at?: string | null
+          created_at?: string
+          delete_at?: string | null
+          id?: string
+          name: string
+          phone?: string | null
+          read_only_since?: string | null
+          rebooking_message?: string | null
+          slug: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_status?: Database["public"]["Enums"]["subscription_status"]
+          trial_ends_at?: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          block_at?: string | null
+          created_at?: string
+          delete_at?: string | null
+          id?: string
+          name?: string
+          phone?: string | null
+          read_only_since?: string | null
+          rebooking_message?: string | null
+          slug?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_status?: Database["public"]["Enums"]["subscription_status"]
+          trial_ends_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -43,7 +152,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      membership_role: "manager" | "receptionist"
+      subscription_status:
+        | "trialing"
+        | "active"
+        | "past_due"
+        | "read_only"
+        | "blocked"
+        | "canceled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -173,7 +289,17 @@ export const Constants = {
     Enums: {},
   },
   public: {
-    Enums: {},
+    Enums: {
+      membership_role: ["manager", "receptionist"],
+      subscription_status: [
+        "trialing",
+        "active",
+        "past_due",
+        "read_only",
+        "blocked",
+        "canceled",
+      ],
+    },
   },
 } as const
 

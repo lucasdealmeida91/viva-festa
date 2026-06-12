@@ -1,0 +1,3 @@
+-- NF-8: demo seed (buffet fictício completo).
+-- Cresce a cada marco — ver checklist em docs/03-fases-e-tarefas.md.
+-- M0 adicionará usuários e tenant de demonstração.

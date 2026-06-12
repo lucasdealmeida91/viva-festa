@@ -98,6 +98,7 @@ Ciclo completo de inadimplência simulável com test clocks do Stripe (RN-11.3).
 
 - **Homebrew falha sem Command Line Tools** ("Xcode alone is not sufficient on Sequoia") — por isso o Supabase CLI vai como devDependency npm em vez de brew. Se precisar do brew para outra coisa: `xcode-select --install`.
 - **`supabase gen types` exige access token mesmo com `--local`/`--db-url`** (bug do CLI ~2.106): o script `db:types` contorna com um token dummy e conexão direta ao Postgres local. Se você rodar `supabase login`, o token real tem precedência.
+- **Tabelas novas nascem sem grants DML** (nem para `service_role`) nesta imagem do Postgres — toda migration deve conceder grants explícitos ([02-modelo-de-dados.md](02-modelo-de-dados.md) §4).
 - **Next 16 dev escreve em `.next/dev`** — limpar cache é `rm -rf .next`, e não conflita com builds.
 - **Lockfile do Next**: duas instâncias de `next dev` no mesmo diretório falham — feche a anterior.
 - **`supabase start` lento na primeira vez**: baixa as imagens Docker; nas seguintes é rápido.

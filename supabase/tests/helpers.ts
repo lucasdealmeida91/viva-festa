@@ -24,3 +24,28 @@ export function createAdminClient() {
     auth: { autoRefreshToken: false, persistSession: false },
   });
 }
+
+export const TEST_PASSWORD = "test-password-123";
+
+/** Creates a confirmed auth user via the admin API. Returns the user id. */
+export async function createTestUser(email: string) {
+  const admin = createAdminClient();
+  const { data, error } = await admin.auth.admin.createUser({
+    email,
+    password: TEST_PASSWORD,
+    email_confirm: true,
+  });
+  if (error) throw error;
+  return data.user.id;
+}
+
+/** RLS-scoped client authenticated as the given test user. */
+export async function signInAs(email: string) {
+  const client = createAnonClient();
+  const { error } = await client.auth.signInWithPassword({
+    email,
+    password: TEST_PASSWORD,
+  });
+  if (error) throw error;
+  return client;
+}
