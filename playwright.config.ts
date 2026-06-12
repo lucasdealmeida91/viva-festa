@@ -6,7 +6,9 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   reporter: "list",
-  // Dev-server e2e compiles routes on first hit; cold compiles blow the 5s default.
+  // Dev-server e2e compiles routes on first hit; cold compiles under full
+  // parallel load can stall well past the defaults.
+  timeout: 60_000,
   expect: { timeout: 15_000 },
   use: {
     baseURL: "http://localhost:3000",

@@ -10,6 +10,20 @@ export const WEEKDAYS_PT = [
   "Sábado",
 ] as const;
 
+export const PARTY_STATUS_PT = {
+  budget: "Orçamento",
+  reserved: "Reservada",
+  confirmed: "Confirmada",
+  completed: "Realizada",
+  canceled: "Cancelada",
+} as const;
+
+/** "2026-06-06" → "06/06/2026" (NF-5). */
+export function formatDateBR(date: string): string {
+  const [year, month, day] = date.split("-");
+  return `${day}/${month}/${year}`;
+}
+
 /** Data de hoje (YYYY-MM-DD) no fuso de São Paulo (NF-5). */
 export function todayInSaoPaulo(): string {
   return new Intl.DateTimeFormat("en-CA", {

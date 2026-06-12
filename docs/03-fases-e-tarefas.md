@@ -120,7 +120,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Aceite:** critério do PRD — impossível confirmar duas festas no mesmo turno/data (teste de integração tentando a corrida); transições inválidas rejeitadas.
 **Nota:** neste marco a confirmação fica atrás do aviso "requer contrato" (contrato chega no M2).
 
-### [ ] M1-T5 — Festa: telas de criação e gestão
+### [x] M1-T5 — Festa: telas de criação e gestão
 **RNs:** RN-3 (UI das transições).
 **Entregáveis:** criação de orçamento a partir da agenda; página da festa com dados, status e ações de transição; cancelar/reabrir com motivo obrigatório.
 **Aceite:** fluxo orçamento → reservada → cancelada de ponta a ponta pela UI; agenda reflete cada mudança.

@@ -125,9 +125,9 @@ export default async function AgendaPage({
                 <Link
                   key={cell.shift.id}
                   href={
-                    cell.status === "free" || cell.status === "budget"
-                      ? `/app/agenda/nova?data=${day.date}&turno=${cell.shift.id}`
-                      : `/app/agenda?mes=${monthPrefix}`
+                    cell.partyId
+                      ? `/app/festas/${cell.partyId}`
+                      : `/app/agenda/nova?data=${day.date}&turno=${cell.shift.id}`
                   }
                   className={cn(
                     "rounded-md px-3 py-1.5 text-sm",
