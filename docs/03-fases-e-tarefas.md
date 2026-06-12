@@ -47,7 +47,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** Vitest configurado (unit + integração com Supabase local); Playwright instalado com viewport mobile; scripts `test`, `test:integration`, `test:e2e`; um teste de exemplo em cada camada.
 **Aceite:** os três scripts rodam verdes localmente.
 
-### [ ] F0-T4 — CI (GitHub Actions)
+### [x] F0-T4 — CI (GitHub Actions)
 **Objetivo:** pipeline obrigatório antes da primeira feature.
 **Entregáveis:** workflow: lint (ESLint CLI flat config) → typecheck → unit → integração (sobe Supabase via CLI); e2e nos PRs para `main`.
 **Aceite:** PR de exemplo roda o pipeline verde.
