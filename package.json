@@ -11,12 +11,14 @@
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
     "db:migration": "supabase migration new",
-    "db:types": "supabase gen types typescript --local > lib/supabase/database.types.ts"
+    "db:types": "SUPABASE_ACCESS_TOKEN=${SUPABASE_ACCESS_TOKEN:-sbp_0000000000000000000000000000000000000000} supabase gen types typescript --db-url postgresql://postgres:postgres@127.0.0.1:54322/postgres > lib/supabase/database.types.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
     "@hugeicons/core-free-icons": "^4.2.0",
     "@hugeicons/react": "^1.1.6",
+    "@supabase/ssr": "^0.12.0",
+    "@supabase/supabase-js": "^2.108.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "next": "16.2.9",

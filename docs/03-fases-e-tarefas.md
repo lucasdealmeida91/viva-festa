@@ -36,7 +36,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** `supabase init` no repo; projeto cloud criado; `.env.local.example` com todas as variáveis; script `db:types` no `package.json`; branch principal renomeada de `master` para `main`; seção correspondente do [07-setup.md](07-setup.md) validada do zero.
 **Aceite:** `supabase start` + `npm run dev` funcionam numa máquina limpa seguindo só o runbook.
 
-### [ ] F0-T2 — Estrutura base do app
+### [x] F0-T2 — Estrutura base do app
 **Objetivo:** esqueleto de rotas e layout do [01-arquitetura.md](01-arquitetura.md) §5.
 **Entregáveis:** route groups e páginas placeholder das 5 superfícies; `layout.tsx` com `lang="pt-BR"`, metadata e fonte; `proxy.ts` com refresh de sessão Supabase (`@supabase/ssr`); clients em `lib/supabase/`.
 **Aceite:** navegação entre superfícies funciona; build passa.
