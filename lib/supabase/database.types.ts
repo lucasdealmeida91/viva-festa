@@ -149,7 +149,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_tenant: {
+        Args: { p_name: string; p_slug: string }
+        Returns: string
+      }
     }
     Enums: {
       membership_role: "manager" | "receptionist"

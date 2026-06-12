@@ -24,7 +24,7 @@ test.describe.serial("ciclo de autenticação (M0-T1)", () => {
 
     await expect(page).toHaveURL(/\/onboarding$/);
     await expect(
-      page.getByRole("heading", { name: "Bem-vindo ao VivaFesta" }),
+      page.getByRole("heading", { name: "Crie a página do seu buffet" }),
     ).toBeVisible();
   });
 

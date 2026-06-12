@@ -76,7 +76,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** páginas `(auth)` de cadastro, login e logout com Supabase Auth; criação do `profile`; redirecionamento pós-login (com tenant → `/app`; sem tenant → `/onboarding`).
 **Aceite:** ciclo cadastro → logout → login funciona; rotas protegidas exigem sessão.
 
-### [ ] M0-T2 — Onboarding: criação do tenant
+### [x] M0-T2 — Onboarding: criação do tenant
 **RNs:** RN-1.1, RN-1.4, RN-11.1 (início do trial).
 **Entregáveis:** fluxo `/onboarding`: cria `tenant` (nome + slug validado contra slugs reservados) + `membership manager` + `trial_ends_at = now()+14d`.
 **Aceite:** dois cadastros independentes criam dois tenants isolados (teste F0-T7 estendido).

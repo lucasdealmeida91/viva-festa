@@ -1,22 +1,18 @@
 import { Button } from "@/components/ui/button";
+import { OnboardingForm } from "@/components/onboarding/onboarding-form";
 import { signOut } from "../actions";
 
 export const metadata = { title: "Bem-vindo" };
 
 export default function OnboardingPage() {
   return (
-    <main className="flex min-h-dvh items-center justify-center p-6">
-      <div className="text-center">
-        <h1 className="text-2xl font-semibold">Bem-vindo ao VivaFesta</h1>
-        <p className="text-muted-foreground mt-2">
-          Criação do buffet — em construção (M0-T2).
-        </p>
-        <form action={signOut} className="mt-6">
-          <Button type="submit" variant="outline" size="sm">
-            Sair
-          </Button>
-        </form>
-      </div>
+    <main className="flex min-h-dvh flex-col items-center justify-center gap-4 p-6">
+      <OnboardingForm />
+      <form action={signOut}>
+        <Button type="submit" variant="ghost" size="sm">
+          Sair
+        </Button>
+      </form>
     </main>
   );
 }
