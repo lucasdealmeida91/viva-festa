@@ -90,6 +90,50 @@ export type Database = {
         }
         Relationships: []
       }
+      shifts: {
+        Row: {
+          active: boolean
+          created_at: string
+          ends_at: string
+          id: string
+          label: string
+          starts_at: string
+          tenant_id: string
+          updated_at: string
+          weekday: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          ends_at: string
+          id?: string
+          label: string
+          starts_at: string
+          tenant_id: string
+          updated_at?: string
+          weekday: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          ends_at?: string
+          id?: string
+          label?: string
+          starts_at?: string
+          tenant_id?: string
+          updated_at?: string
+          weekday?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shifts_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tenants: {
         Row: {
           address: string | null

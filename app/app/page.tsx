@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
@@ -32,6 +33,11 @@ export default async function PainelPage() {
       <p className="text-muted-foreground mt-4">
         Agenda, festas, pacotes, clientes e financeiro — em construção (M1+).
       </p>
+      <nav className="mt-6">
+        <Link href="/app/configuracoes" className="underline">
+          Configurações do buffet
+        </Link>
+      </nav>
     </main>
   );
 }

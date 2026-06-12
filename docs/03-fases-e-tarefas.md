@@ -81,7 +81,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** fluxo `/onboarding`: cria `tenant` (nome + slug validado contra slugs reservados) + `membership manager` + `trial_ends_at = now()+14d`.
 **Aceite:** dois cadastros independentes criam dois tenants isolados (teste F0-T7 estendido).
 
-### [ ] M0-T3 — Configurações do buffet e turnos
+### [x] M0-T3 — Configurações do buffet e turnos
 **RNs:** RN-2.1.
 **Entregáveis:** tela de configurações (nome, endereço, telefone, slug somente leitura pós-criação); CRUD de turnos com label, dia da semana e horários.
 **Aceite:** critério do PRD — gestor configura turnos de sábado e domingo em < 5 min sem ajuda (validar com usuário real ou cronometrar o fluxo).
