@@ -1,6 +1,7 @@
 # 06 — Observabilidade: PostHog e Sentry
 
-> Decisões (11/06/2026): PostHog para analytics de produto em **projeto novo "VivaFesta" na org SLJC LTDA**; Sentry para erros client+server. **Firebase fora da stack.**
+> Decisões (11/06/2026): PostHog para analytics de produto no **projeto 346314 (org SLJC LTDA, US Cloud)**; Sentry para erros client+server. **Firebase fora da stack.**
+> Implementação: wrapper em `lib/analytics/` (allowlist), init de client em `instrumentation-client.ts`, Sentry server em `sentry.server.config.ts` (F0-T5/T6, 12/06/2026).
 
 ## 1. Sentry
 

@@ -52,12 +52,12 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** workflow: lint (ESLint CLI flat config) → typecheck → unit → integração (sobe Supabase via CLI); e2e nos PRs para `main`.
 **Aceite:** PR de exemplo roda o pipeline verde.
 
-### [ ] F0-T5 — Sentry
+### [x] F0-T5 — Sentry
 **Objetivo:** erros visíveis desde a primeira feature.
 **Entregáveis:** `@sentry/nextjs` (client + server, via `instrumentation`); DSN por ambiente; filtro de PII em `beforeSend` ([06-observabilidade.md](06-observabilidade.md) §1).
 **Aceite:** erro de teste aparece no Sentry; nenhum dado pessoal no payload.
 
-### [ ] F0-T6 — PostHog
+### [x] F0-T6 — PostHog
 **Objetivo:** analytics pronto para instrumentar os marcos.
 **Entregáveis:** **criar projeto "VivaFesta" na org SLJC do PostHog**; wrapper `lib/analytics/` com allowlist de propriedades ([06-observabilidade.md](06-observabilidade.md) §2); keys por ambiente.
 **Aceite:** evento de teste aparece no PostHog; propriedade fora da allowlist é descartada.
