@@ -109,7 +109,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 
 > **Nota de sequência** (12/06/2026): T4 foi executada antes da T3 — o aceite da agenda ("reflete festas em todos os status") depende do schema de festas existir.
 
-### [ ] M1-T3 — Agenda mensal
+### [x] M1-T3 — Agenda mensal
 **RNs:** RN-2.2, RN-2.3.
 **Entregáveis:** visão mensal por data/turno com status colorido (livre, orçamento, reservada, confirmada, realizada); navegação entre meses; atalho "criar festa" na célula.
 **Aceite:** agenda reflete festas em todos os status; datas/fuso em `America/Sao_Paulo` (NF-5).

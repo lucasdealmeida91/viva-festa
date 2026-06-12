@@ -48,6 +48,9 @@ export default async function PainelPage({
         Agenda, festas, pacotes, clientes e financeiro — em construção (M1+).
       </p>
       <nav className="mt-6 flex gap-4">
+        <Link href="/app/agenda" className="underline">
+          Agenda
+        </Link>
         <Link href="/app/pacotes" className="underline">
           Pacotes
         </Link>

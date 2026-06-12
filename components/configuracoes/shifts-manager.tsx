@@ -119,6 +119,11 @@ export function ShiftsManager({ shifts }: { shifts: Shift[] }) {
             {state.error}
           </p>
         )}
+        {state?.success && (
+          <p role="status" className="w-full text-sm text-green-700">
+            {state.success}
+          </p>
+        )}
       </form>
     </section>
   );

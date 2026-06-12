@@ -10,6 +10,13 @@ export const WEEKDAYS_PT = [
   "Sábado",
 ] as const;
 
+/** Data de hoje (YYYY-MM-DD) no fuso de São Paulo (NF-5). */
+export function todayInSaoPaulo(): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+  }).format(new Date());
+}
+
 /** "12:00:00" (Postgres time) → "12:00" */
 export function formatTime(time: string): string {
   return time.slice(0, 5);
