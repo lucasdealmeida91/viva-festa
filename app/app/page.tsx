@@ -54,6 +54,9 @@ export default async function PainelPage({
         <Link href="/app/pacotes" className="underline">
           Pacotes
         </Link>
+        <Link href="/app/clientes" className="underline">
+          Clientes
+        </Link>
         <Link href="/app/configuracoes" className="underline">
           Configurações do buffet
         </Link>

@@ -10,6 +10,21 @@ export const WEEKDAYS_PT = [
   "Sábado",
 ] as const;
 
+export const MONTHS_PT = [
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
+] as const;
+
 export const PARTY_STATUS_PT = {
   budget: "Orçamento",
   reserved: "Reservada",

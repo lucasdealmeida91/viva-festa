@@ -134,7 +134,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 
 ## M2 — Clientes, contrato e parcelas
 
-### [ ] M2-T1 — Clientes finais e aniversariantes
+### [x] M2-T1 — Clientes finais e aniversariantes
 **RNs:** RN-10.1.
 **Entregáveis:** migrations `customers` + `birthday_children` (mês/ano apenas — LGPD); CRUD com vínculo de múltiplos aniversariantes; busca por nome/telefone.
 **Aceite:** não existe campo de data completa de nascimento em formulário nem em banco.
