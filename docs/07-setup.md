@@ -38,9 +38,9 @@ npm run dev                        # http://localhost:3000
 
 | Variável | Escopo | Origem |
 |---|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | pública | `supabase status` (dev) / projeto cloud (prod) |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | pública | idem |
-| `SUPABASE_SECRET_KEY` | server | service role — webhooks, `/admin`, seed |
+| `NEXT_PUBLIC_SUPABASE_URL` | pública | `npx supabase status` (dev) / projeto cloud (prod) |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | pública | idem — formato novo `sb_publishable_...` (substitui a anon key) |
+| `SUPABASE_SECRET_KEY` | server | `sb_secret_...` (substitui a service role) — webhooks, `/admin`, seed |
 | `NEXT_PUBLIC_POSTHOG_KEY` / `NEXT_PUBLIC_POSTHOG_HOST` | pública | Projeto VivaFesta (org SLJC), host `https://us.i.posthog.com` |
 | `NEXT_PUBLIC_SENTRY_DSN` | pública | Projeto Sentry |
 | `SENTRY_AUTH_TOKEN` | CI/build | Upload de source maps |

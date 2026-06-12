@@ -31,7 +31,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 
 ## F0 — Fundação técnica
 
-### [ ] F0-T1 — Supabase: CLI local + projeto cloud
+### [x] F0-T1 — Supabase: CLI local + projeto cloud
 **Objetivo:** banco local versionado e projeto cloud de produção criados.
 **Entregáveis:** `supabase init` no repo; projeto cloud criado; `.env.local.example` com todas as variáveis; script `db:types` no `package.json`; branch principal renomeada de `master` para `main`; seção correspondente do [07-setup.md](07-setup.md) validada do zero.
 **Aceite:** `supabase start` + `npm run dev` funcionam numa máquina limpa seguindo só o runbook.
