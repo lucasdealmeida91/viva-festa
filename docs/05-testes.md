@@ -44,7 +44,7 @@ Casos de borda obrigatórios na mesma suite:
 
 ## 3. Testes de isolamento multi-tenant (NF-1)
 
-Obrigatórios em **todos os marcos**. O harness (F0-T5) mantém um cenário fixo:
+Obrigatórios em **todos os marcos**. O harness (F0-T7) mantém um cenário fixo:
 
 1. Cria tenant A e tenant B, cada um com gestor, recepcionista e cliente final.
 2. Popula as tabelas existentes até o marco atual.

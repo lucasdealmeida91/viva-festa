@@ -5,6 +5,15 @@
 >
 > **Status:** marque `[x]` quando a tarefa for concluída e validada. Este arquivo é o tracker do projeto.
 
+## Protocolo de execução de tarefa (leia antes de cada sessão)
+
+Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto limpo**. Quatro regras para isso valer na prática:
+
+1. **Uma tarefa = uma sessão nova.** Não acumule tarefas na mesma conversa; terminou e validou, abra sessão nova para a próxima.
+2. **Leitura mínima.** A sessão lê somente: a tarefa, as RNs citadas no PRD e as seções dos docs que a tarefa referencia. Nunca carregue a documentação inteira nem o PRD completo no contexto.
+3. **Plano fino just-in-time.** Tarefa com mais de ~2 entregáveis: antes de codar, quebre em passos pequenos (skill `writing-plans`) e execute passo a passo. Este documento é roadmap — o plano de implementação detalhado nasce na hora de executar, nunca antes.
+4. **Não coube na sessão? Pare e divida.** Se ficar claro que a tarefa não termina com folga de contexto, pare, divida-a neste arquivo (T-Na/T-Nb) e execute em sessões separadas. Nunca esprema.
+
 ## Visão geral
 
 | Fase | Nome | Depende de | Resultado |
@@ -33,17 +42,27 @@
 **Aceite:** navegação entre superfícies funciona; build passa.
 **Atenção:** Next 16 — `proxy.ts` (não `middleware.ts`), `await params/cookies` (doc 01 §6).
 
-### [ ] F0-T3 — Testes e CI
-**Objetivo:** harness de testes e pipeline desde o início.
-**Entregáveis:** Vitest configurado (unit + integração com Supabase local); Playwright instalado; GitHub Actions: lint (ESLint CLI flat config), typecheck, unit; job de integração sobe Supabase via CLI.
-**Aceite:** PR de exemplo roda o pipeline verde; um teste unit e um de integração de exemplo passam.
+### [ ] F0-T3 — Harness de testes (Vitest + Playwright)
+**Objetivo:** rodar as três camadas de teste localmente desde o início.
+**Entregáveis:** Vitest configurado (unit + integração com Supabase local); Playwright instalado com viewport mobile; scripts `test`, `test:integration`, `test:e2e`; um teste de exemplo em cada camada.
+**Aceite:** os três scripts rodam verdes localmente.
 
-### [ ] F0-T4 — Sentry + PostHog
-**Objetivo:** observabilidade ligada antes da primeira feature.
-**Entregáveis:** `@sentry/nextjs` (client + server, via `instrumentation`); **criar projeto "VivaFesta" na org SLJC do PostHog**; wrapper `lib/analytics/` com allowlist de propriedades ([06-observabilidade.md](06-observabilidade.md)); DSNs/keys por ambiente.
-**Aceite:** erro de teste aparece no Sentry; evento de teste aparece no PostHog; nenhum dado pessoal nas propriedades.
+### [ ] F0-T4 — CI (GitHub Actions)
+**Objetivo:** pipeline obrigatório antes da primeira feature.
+**Entregáveis:** workflow: lint (ESLint CLI flat config) → typecheck → unit → integração (sobe Supabase via CLI); e2e nos PRs para `main`.
+**Aceite:** PR de exemplo roda o pipeline verde.
 
-### [ ] F0-T5 — Migration inicial + harness de isolamento
+### [ ] F0-T5 — Sentry
+**Objetivo:** erros visíveis desde a primeira feature.
+**Entregáveis:** `@sentry/nextjs` (client + server, via `instrumentation`); DSN por ambiente; filtro de PII em `beforeSend` ([06-observabilidade.md](06-observabilidade.md) §1).
+**Aceite:** erro de teste aparece no Sentry; nenhum dado pessoal no payload.
+
+### [ ] F0-T6 — PostHog
+**Objetivo:** analytics pronto para instrumentar os marcos.
+**Entregáveis:** **criar projeto "VivaFesta" na org SLJC do PostHog**; wrapper `lib/analytics/` com allowlist de propriedades ([06-observabilidade.md](06-observabilidade.md) §2); keys por ambiente.
+**Aceite:** evento de teste aparece no PostHog; propriedade fora da allowlist é descartada.
+
+### [ ] F0-T7 — Migration inicial + harness de isolamento
 **Objetivo:** base multi-tenant com RLS e o teste de isolamento que acompanhará todos os marcos (NF-1).
 **Entregáveis:** migration com `tenants`, `profiles`, `memberships`, funções `private.*` ([02-modelo-de-dados.md](02-modelo-de-dados.md) §3); helper de teste que cria 2 tenants + usuários e verifica vazamento cruzado.
 **Aceite:** teste de isolamento passa; tentativa de SELECT cross-tenant retorna vazio (não erro).
@@ -52,17 +71,22 @@
 
 ## M0 — Conta do buffet
 
-### [ ] M0-T1 — Cadastro, login e onboarding do tenant
-**RNs:** RN-1.1, RN-1.2, RN-1.4, RN-11.1 (início do trial).
-**Entregáveis:** páginas `(auth)`; signup cria `tenant` (nome + slug validado contra slugs reservados) + `membership manager` + `trial_ends_at = now()+14d`; login/logout.
-**Aceite:** dois cadastros independentes criam dois tenants isolados (teste F0-T5 estendido).
+### [ ] M0-T1 — Cadastro e login
+**RNs:** RN-1.2.
+**Entregáveis:** páginas `(auth)` de cadastro, login e logout com Supabase Auth; criação do `profile`; redirecionamento pós-login (com tenant → `/app`; sem tenant → `/onboarding`).
+**Aceite:** ciclo cadastro → logout → login funciona; rotas protegidas exigem sessão.
 
-### [ ] M0-T2 — Configurações do buffet e turnos
+### [ ] M0-T2 — Onboarding: criação do tenant
+**RNs:** RN-1.1, RN-1.4, RN-11.1 (início do trial).
+**Entregáveis:** fluxo `/onboarding`: cria `tenant` (nome + slug validado contra slugs reservados) + `membership manager` + `trial_ends_at = now()+14d`.
+**Aceite:** dois cadastros independentes criam dois tenants isolados (teste F0-T7 estendido).
+
+### [ ] M0-T3 — Configurações do buffet e turnos
 **RNs:** RN-2.1.
 **Entregáveis:** tela de configurações (nome, endereço, telefone, slug somente leitura pós-criação); CRUD de turnos com label, dia da semana e horários.
 **Aceite:** critério do PRD — gestor configura turnos de sábado e domingo em < 5 min sem ajuda (validar com usuário real ou cronometrar o fluxo).
 
-### [ ] M0-T3 — Convite de usuários e papéis
+### [ ] M0-T4 — Convite de usuários e papéis
 **RNs:** RN-1.2, RN-1.3.
 **Entregáveis:** convite por e-mail (Supabase Auth invite) com papel; listagem/remoção de membros; guards: recepcionista só `/checkin`.
 **Aceite:** critério do PRD — recepcionista convidado não acessa nenhuma rota além do check-in (teste e2e + teste de RLS).
@@ -86,13 +110,18 @@
 **Entregáveis:** visão mensal por data/turno com status colorido (livre, orçamento, reservada, confirmada, realizada); navegação entre meses; atalho "criar festa" na célula.
 **Aceite:** agenda reflete festas em todos os status; datas/fuso em `America/Sao_Paulo` (NF-5).
 
-### [ ] M1-T4 — Festa: criação e ciclo de vida
+### [ ] M1-T4 — Festa: schema e máquina de estados
 **RNs:** RN-3.1–3.5, RN-2.4.
-**Entregáveis:** migrations `parties` (+ índice de double-booking); criação em `budget`; transições com validação (Server Action + trigger); cancelamento libera o turno; reabertura de realizada só por gestor com motivo → `audit_logs` (NF-6).
+**Entregáveis:** migrations `parties` + `audit_logs` (+ índice de double-booking); Server Actions de transição com validação (+ trigger de guarda); cancelamento libera o turno; reabertura de realizada só por gestor com motivo → `audit_logs` (NF-6). Sem UI neste passo — testes de integração direto nas actions.
 **Aceite:** critério do PRD — impossível confirmar duas festas no mesmo turno/data (teste de integração tentando a corrida); transições inválidas rejeitadas.
 **Nota:** neste marco a confirmação fica atrás do aviso "requer contrato" (contrato chega no M2).
 
-### [ ] M1-T5 — Congelamento e sobrescrita de regras
+### [ ] M1-T5 — Festa: telas de criação e gestão
+**RNs:** RN-3 (UI das transições).
+**Entregáveis:** criação de orçamento a partir da agenda; página da festa com dados, status e ações de transição; cancelar/reabrir com motivo obrigatório.
+**Aceite:** fluxo orçamento → reservada → cancelada de ponta a ponta pela UI; agenda reflete cada mudança.
+
+### [ ] M1-T6 — Congelamento e sobrescrita de regras
 **RNs:** RN-4.5, RN-4.6.
 **Entregáveis:** cópia dos parâmetros do pacote para `rule_*` na confirmação; tela de sobrescrita por festa com motivo → `audit_logs`.
 **Aceite:** critério do PRD — alterar o pacote depois não muda festa confirmada (teste de integração).
@@ -130,27 +159,32 @@
 
 ## M3 — Convidados, convite digital e RSVP
 
-### [ ] M3-T1 — Lista de convidados e grupos
-**RNs:** RN-5.1–5.5.
-**Entregáveis:** migrations `guests` + `guest_groups`; CRUD na festa (gestor); grupos; totalizadores contratado vs. esperado por categoria usando `lib/domain/classify` (RN-5.5); destaque para convidado sem idade (RN-4.3); congelamento da lista pós-encerramento (RN-5.4).
-**Aceite:** totalizadores corretos com o seed; classificação nunca digitável.
+### [ ] M3-T1 — Convidados: schema e CRUD
+**RNs:** RN-5.1, RN-5.2, RN-5.4.
+**Entregáveis:** migrations `guests` + `guest_groups` com RLS; CRUD de convidados na festa (gestor); congelamento da lista pós-encerramento.
+**Aceite:** classificação nunca digitável (campo não existe); lista congela após encerramento (teste de integração).
 
-### [ ] M3-T2 — Página pública do convite
+### [ ] M3-T2 — Grupos e totalizadores
+**RNs:** RN-5.3, RN-5.5, RN-4.3.
+**Entregáveis:** agrupamento por família/grupo; totalizadores contratado vs. esperado por categoria usando `lib/domain/classify`; destaque para convidado sem idade.
+**Aceite:** totalizadores corretos com o seed.
+
+### [ ] M3-T3 — Página pública do convite
 **RNs:** RN-6.1, RN-6.2, RN-6.4.
 **Entregáveis:** rota `/[tenantSlug]/[inviteToken]`; RPC `get_invite` (AD-5); geração do `invite_token` na confirmação; publicar/despublicar; mobile-first.
 **Aceite:** critério do PRD — resposta da RPC não contém lista de convidados, telefones nem status de terceiros (**teste de API**, não só UI).
 
-### [ ] M3-T3 — Fluxo de RSVP com acompanhantes
+### [ ] M3-T4 — Fluxo de RSVP com acompanhantes
 **RNs:** RN-6.3, RN-6.7, RN-5.3.
 **Entregáveis:** RPCs `find_guest` + `submit_rsvp`; busca do próprio nome; confirmar/recusar; acompanhantes (nome + idade) entram como `guests origin=companion` no grupo do titular; alteração de resposta até o prazo.
 **Aceite:** critério do PRD — convidado confirma + 2 acompanhantes pelo celular e os totalizadores (gestor e cliente) refletem a classificação em tempo real.
 
-### [ ] M3-T4 — Modos de lista e prazo de RSVP
+### [ ] M3-T5 — Modos de lista e prazo de RSVP
 **RNs:** RN-6.5, RN-6.6.
 **Entregáveis:** configuração por festa: lista fechada (padrão) / aberta (`origin=self_registered`); `rsvp_deadline`; após o prazo a página vira somente-informativa.
 **Aceite:** critério do PRD — após o prazo, nenhuma ação de confirmação é aceita (testar pela RPC, não só pela UI).
 
-### [ ] M3-T5 — e2e do convite
+### [ ] M3-T6 — e2e do convite
 **Entregáveis:** Playwright mobile viewport: abrir convite → buscar nome → confirmar com acompanhantes → verificar totalizadores; teste de privacidade da API (RN-6.4).
 **Aceite:** suite verde no CI.
 
@@ -191,32 +225,42 @@
 
 ## M5 — Espaço do cliente, recompra e assinatura
 
-### [ ] M5-T1 — Magic link e espaço do cliente
-**RNs:** RN-12.1–12.3.
-**Entregáveis:** envio de magic link pelo gestor; vínculo `customers.auth_user_id`; `/cliente`: festa, lista (edição até o início — RN-5.4), RSVPs em tempo real, link do convite, parcelas (leitura), relatório quando liberado.
-**Aceite:** critério do PRD — cliente não vê nada além do permitido (teste de RLS por papel).
+### [ ] M5-T1 — Magic link: acesso do cliente final
+**RNs:** RN-12.1.
+**Entregáveis:** envio de magic link pelo gestor; vínculo `customers.auth_user_id` no primeiro acesso; guard de `/cliente`; políticas RLS do papel cliente final.
+**Aceite:** cliente entra apenas pelo link; `/cliente` sem sessão redireciona; RLS do papel validada no harness de isolamento.
 
-### [ ] M5-T2 — Alertas de recompra
+### [ ] M5-T2 — Espaço do cliente: telas
+**RNs:** RN-12.2, RN-12.3, RN-5.4.
+**Entregáveis:** `/cliente`: dados da festa; gestão da lista (edição até o início da festa); RSVPs em tempo real com totalizadores; copiar/compartilhar link do convite; parcelas (leitura); relatório pós-festa quando liberado pelo gestor.
+**Aceite:** critério do PRD — cliente não vê nada além do permitido em RN-12.3 (teste de RLS por papel).
+
+### [ ] M5-T3 — Alertas de recompra
 **RNs:** RN-10.3–10.5.
 **Entregáveis:** geração do alerta no encerramento (90 dias antes do aniversário seguinte — mês/ano); card na home do gestor; botão `wa.me` com mensagem-modelo do tenant (placeholders); "criar orçamento" pré-preenchido marca `converted`; "dispensar".
 **Aceite:** critério do PRD — festa realizada gera alerta na data certa com mensagem correta (teste com clock controlado).
 
-### [ ] M5-T3 — Stripe: assinatura do SaaS
-**RNs:** RN-11.1, RN-11.3. **Decisão:** AD-6 (billing isolado).
-**Entregáveis:** `lib/billing/` + Stripe Checkout (mensal R$ 197 / anual R$ 1.970); webhook atualiza `subscription_status`; retentativas do Stripe → `past_due` → `read_only` após 10 dias; regularização volta a `active`; aviso persistente faltando 3 dias de trial.
-**Aceite:** ciclo completo simulado com Stripe CLI (`trialing → active → past_due → read_only → active`).
+### [ ] M5-T4 — Stripe: checkout da assinatura
+**RNs:** RN-11.1. **Decisão:** AD-6 (billing isolado).
+**Entregáveis:** `lib/billing/` (interface + implementação Stripe); produtos mensal R$ 197 / anual R$ 1.970; Stripe Checkout a partir do app; páginas de retorno (sucesso/cancelado).
+**Aceite:** assinatura de teste completa via Checkout em modo test, refletida em `tenants`.
 
-### [ ] M5-T4 — Modo leitura e ciclo de bloqueio
-**RNs:** RN-11.2.
-**Entregáveis:** `tenant_is_writable` (AD-3) cobrindo trial expirado → 30 dias leitura → bloqueio → retenção 6 meses; banners de estado na UI; e-mails do ciclo (template mínimo).
+### [ ] M5-T5 — Stripe: webhook e estados da assinatura
+**RNs:** RN-11.3.
+**Entregáveis:** `/api/webhooks/stripe` atualiza `subscription_status`; retentativas do Stripe → `past_due` → `read_only` após 10 dias; regularização volta a `active` imediatamente.
+**Aceite:** ciclo `trialing → active → past_due → read_only → active` simulado com Stripe CLI/test clocks.
+
+### [ ] M5-T6 — Modo leitura e ciclo de bloqueio
+**RNs:** RN-11.1 (aviso de trial), RN-11.2.
+**Entregáveis:** `tenant_is_writable` (AD-3) cobrindo trial expirado → 30 dias leitura → bloqueio → retenção 6 meses; aviso persistente faltando 3 dias de trial; banners de estado na UI; e-mails do ciclo (template mínimo).
 **Aceite:** critério do PRD — trial expirado entra em modo leitura (escrita falha **no banco**); assinou, volta ao normal sem perda.
 
-### [ ] M5-T5 — Exportação CSV e cancelamento
+### [ ] M5-T7 — Exportação CSV e cancelamento
 **RNs:** RN-11.4.
 **Entregáveis:** exportação CSV (clientes, festas, convidados, parcelas) disponível sempre; cancelamento self-service efetivo no fim do período pago.
 **Aceite:** critério do PRD — CSVs legíveis e completos contra o seed.
 
-### [ ] M5-T6 — Painel admin mínimo da plataforma
+### [ ] M5-T8 — Painel admin mínimo da plataforma
 **Entregáveis:** `/admin` (service role): lista de tenants, status de assinatura, métricas básicas de uso.
 **Aceite:** fundador enxerga a base; nenhum acesso para não-admin (teste).
 

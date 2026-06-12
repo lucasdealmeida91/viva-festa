@@ -17,9 +17,9 @@ Contas/serviços (uma vez, pelo fundador):
 |---|---|---|
 | Supabase | Projeto cloud `vivafesta-prod` | F0-T1 |
 | Vercel | Projeto ligado ao repo GitHub | F0-T1 |
-| Sentry | Projeto Next.js | F0-T4 |
-| PostHog | **Projeto "VivaFesta" na org SLJC LTDA** | F0-T4 |
-| Stripe | Conta + produtos: mensal R$ 197, anual R$ 1.970 | M5-T3 |
+| Sentry | Projeto Next.js | F0-T5 |
+| PostHog | **Projeto "VivaFesta" na org SLJC LTDA** | F0-T6 |
+| Stripe | Conta + produtos: mensal R$ 197, anual R$ 1.970 | M5-T4 |
 | Domínio | `vivafesta.com.br` (pendência D-4 do PRD) | Antes do M3 (URLs públicas do convite) |
 
 ## 2. Subir o ambiente local

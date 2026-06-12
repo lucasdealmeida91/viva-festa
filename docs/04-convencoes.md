@@ -50,7 +50,7 @@ Antes de implementar qualquer área nova, consulte o guia correspondente em `nod
 - Conventional Commits **com referência a RN e tarefa**:
 
 ```
-feat(parties): freeze package rules on confirmation (RN-4.5) [M1-T5]
+feat(parties): freeze package rules on confirmation (RN-4.5) [M1-T6]
 fix(checkin): keep retry queue visible after reconnect (RN-7.6) [M4-T3]
 test(domain): canonical overage case returns R$360 (RN-4, RN-8.2) [M1-T1]
 ```
