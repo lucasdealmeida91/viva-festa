@@ -42,7 +42,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Aceite:** navegação entre superfícies funciona; build passa.
 **Atenção:** Next 16 — `proxy.ts` (não `middleware.ts`), `await params/cookies` (doc 01 §6).
 
-### [ ] F0-T3 — Harness de testes (Vitest + Playwright)
+### [x] F0-T3 — Harness de testes (Vitest + Playwright)
 **Objetivo:** rodar as três camadas de teste localmente desde o início.
 **Entregáveis:** Vitest configurado (unit + integração com Supabase local); Playwright instalado com viewport mobile; scripts `test`, `test:integration`, `test:e2e`; um teste de exemplo em cada camada.
 **Aceite:** os três scripts rodam verdes localmente.

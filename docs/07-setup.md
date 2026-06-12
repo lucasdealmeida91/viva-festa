@@ -6,7 +6,7 @@
 
 | Ferramenta | Versão | Nota |
 |---|---|---|
-| Node.js | ≥ 20.9 (LTS) | Exigência do Next.js 16 |
+| Node.js | **≥ 22 (LTS)** — `.nvmrc` no repo | Node 20 está EOL e quebra supabase-js (sem WebSocket nativo) e jsdom 27 (sem `require()` de ESM). Com nvm: `nvm install && nvm use` |
 | Docker Desktop **ou** OrbStack | atual | Para o Supabase local (`npm run db:start`) |
 | Supabase CLI | — | **devDependency do projeto** (`npx supabase ...`) — instala junto com `npm install`, sem brew |
 | Stripe CLI | atual | Webhooks em dev (a partir do M5) |
