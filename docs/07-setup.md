@@ -7,8 +7,8 @@
 | Ferramenta | Versão | Nota |
 |---|---|---|
 | Node.js | ≥ 20.9 (LTS) | Exigência do Next.js 16 |
-| Docker Desktop | atual | Para o Supabase local |
-| Supabase CLI | atual | `brew install supabase/tap/supabase` |
+| Docker Desktop **ou** OrbStack | atual | Para o Supabase local (`npm run db:start`) |
+| Supabase CLI | — | **devDependency do projeto** (`npx supabase ...`) — instala junto com `npm install`, sem brew |
 | Stripe CLI | atual | Webhooks em dev (a partir do M5) |
 
 Contas/serviços (uma vez, pelo fundador):
@@ -26,13 +26,13 @@ Contas/serviços (uma vez, pelo fundador):
 
 ```bash
 git clone <repo> && cd viva-festa
-npm install
-supabase start                 # Postgres + Auth + Studio locais (Docker)
-cp .env.local.example .env.local   # preencher com os valores de `supabase status`
-npm run dev                    # http://localhost:3000
+npm install                        # instala também o Supabase CLI (devDependency)
+npm run db:start                   # Postgres + Auth + Studio locais (exige Docker rodando)
+cp .env.local.example .env.local   # preencher com os valores de `npx supabase status`
+npm run dev                        # http://localhost:3000
 ```
 
-`supabase start` imprime URL, anon key e service key locais. Studio local: `http://localhost:54323`.
+`npm run db:start` imprime URL, anon key e service key locais. Studio local: `http://localhost:54323`.
 
 ## 3. Variáveis de ambiente
 
@@ -52,13 +52,13 @@ Regra: variável nova ⇒ atualizar `.env.local.example`, esta tabela e as envs 
 ## 4. Fluxo de migrations
 
 ```bash
-supabase migration new <nome>      # cria supabase/migrations/<ts>_<nome>.sql
+npm run db:migration <nome>        # cria supabase/migrations/<ts>_<nome>.sql
 # escrever o SQL (tabela + RLS na MESMA migration — NF-1)
-supabase db reset                  # recria o banco local: migrations + seed.sql
+npm run db:reset                   # recria o banco local: migrations + seed.sql
 npm run db:types                   # regenera lib/supabase/database.types.ts (commitar)
 ```
 
-Para produção: `supabase db push` apontando para o projeto cloud (via `supabase link`), executado **manualmente pelo fundador** no início; automatizar no CI quando houver staging.
+Para produção: `npx supabase db push` apontando para o projeto cloud (via `npx supabase link`), executado **manualmente pelo fundador** no início; automatizar no CI quando houver staging.
 
 Regras:
 - Migration nunca é editada depois de aplicada em prod — crie outra.
@@ -96,6 +96,7 @@ Ciclo completo de inadimplência simulável com test clocks do Stripe (RN-11.3).
 
 ## 8. Problemas conhecidos
 
+- **Homebrew falha sem Command Line Tools** ("Xcode alone is not sufficient on Sequoia") — por isso o Supabase CLI vai como devDependency npm em vez de brew. Se precisar do brew para outra coisa: `xcode-select --install`.
 - **Next 16 dev escreve em `.next/dev`** — limpar cache é `rm -rf .next`, e não conflita com builds.
 - **Lockfile do Next**: duas instâncias de `next dev` no mesmo diretório falham — feche a anterior.
 - **`supabase start` lento na primeira vez**: baixa as imagens Docker; nas seguintes é rápido.
