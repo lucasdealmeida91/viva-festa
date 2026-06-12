@@ -107,12 +107,14 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** migration `packages` + RLS; telas de listagem/forma; arquivamento (não exclusão).
 **Aceite:** impossível salvar `exempt_age >= adult_age` (validação na UI **e** CHECK no banco).
 
+> **Nota de sequência** (12/06/2026): T4 foi executada antes da T3 — o aceite da agenda ("reflete festas em todos os status") depende do schema de festas existir.
+
 ### [ ] M1-T3 — Agenda mensal
 **RNs:** RN-2.2, RN-2.3.
 **Entregáveis:** visão mensal por data/turno com status colorido (livre, orçamento, reservada, confirmada, realizada); navegação entre meses; atalho "criar festa" na célula.
 **Aceite:** agenda reflete festas em todos os status; datas/fuso em `America/Sao_Paulo` (NF-5).
 
-### [ ] M1-T4 — Festa: schema e máquina de estados
+### [x] M1-T4 — Festa: schema e máquina de estados
 **RNs:** RN-3.1–3.5, RN-2.4.
 **Entregáveis:** migrations `parties` + `audit_logs` (+ índice de double-booking); Server Actions de transição com validação (+ trigger de guarda); cancelamento libera o turno; reabertura de realizada só por gestor com motivo → `audit_logs` (NF-6). Sem UI neste passo — testes de integração direto nas actions.
 **Aceite:** critério do PRD — impossível confirmar duas festas no mesmo turno/data (teste de integração tentando a corrida); transições inválidas rejeitadas.

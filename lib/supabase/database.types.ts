@@ -34,6 +34,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          data: Json | null
+          entity: string
+          entity_id: string
+          id: string
+          reason: string
+          tenant_id: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          data?: Json | null
+          entity: string
+          entity_id: string
+          id?: string
+          reason: string
+          tenant_id: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          data?: Json | null
+          entity?: string
+          entity_id?: string
+          id?: string
+          reason?: string
+          tenant_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_logs_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       memberships: {
         Row: {
           created_at: string
@@ -122,6 +166,64 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "packages_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parties: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          package_id: string
+          party_date: string
+          shift_id: string
+          status: Database["public"]["Enums"]["party_status"]
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          package_id: string
+          party_date: string
+          shift_id: string
+          status?: Database["public"]["Enums"]["party_status"]
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          package_id?: string
+          party_date?: string
+          shift_id?: string
+          status?: Database["public"]["Enums"]["party_status"]
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parties_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parties_shift_id_fkey"
+            columns: ["shift_id"]
+            isOneToOne: false
+            referencedRelation: "shifts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parties_tenant_id_fkey"
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
@@ -263,6 +365,12 @@ export type Database = {
     }
     Enums: {
       membership_role: "manager" | "receptionist"
+      party_status:
+        | "budget"
+        | "reserved"
+        | "confirmed"
+        | "completed"
+        | "canceled"
       subscription_status:
         | "trialing"
         | "active"
@@ -401,6 +509,13 @@ export const Constants = {
   public: {
     Enums: {
       membership_role: ["manager", "receptionist"],
+      party_status: [
+        "budget",
+        "reserved",
+        "confirmed",
+        "completed",
+        "canceled",
+      ],
       subscription_status: [
         "trialing",
         "active",
