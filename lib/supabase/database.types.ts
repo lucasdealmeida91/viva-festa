@@ -180,6 +180,12 @@ export type Database = {
           notes: string | null
           package_id: string
           party_date: string
+          rule_adult_age: number | null
+          rule_adult_capacity: number | null
+          rule_child_capacity: number | null
+          rule_exempt_age: number | null
+          rule_extra_adult_price_cents: number | null
+          rule_extra_child_price_cents: number | null
           shift_id: string
           status: Database["public"]["Enums"]["party_status"]
           tenant_id: string
@@ -191,6 +197,12 @@ export type Database = {
           notes?: string | null
           package_id: string
           party_date: string
+          rule_adult_age?: number | null
+          rule_adult_capacity?: number | null
+          rule_child_capacity?: number | null
+          rule_exempt_age?: number | null
+          rule_extra_adult_price_cents?: number | null
+          rule_extra_child_price_cents?: number | null
           shift_id: string
           status?: Database["public"]["Enums"]["party_status"]
           tenant_id: string
@@ -202,6 +214,12 @@ export type Database = {
           notes?: string | null
           package_id?: string
           party_date?: string
+          rule_adult_age?: number | null
+          rule_adult_capacity?: number | null
+          rule_child_capacity?: number | null
+          rule_exempt_age?: number | null
+          rule_extra_adult_price_cents?: number | null
+          rule_extra_child_price_cents?: number | null
           shift_id?: string
           status?: Database["public"]["Enums"]["party_status"]
           tenant_id?: string

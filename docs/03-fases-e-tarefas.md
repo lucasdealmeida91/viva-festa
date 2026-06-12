@@ -125,7 +125,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** criação de orçamento a partir da agenda; página da festa com dados, status e ações de transição; cancelar/reabrir com motivo obrigatório.
 **Aceite:** fluxo orçamento → reservada → cancelada de ponta a ponta pela UI; agenda reflete cada mudança.
 
-### [ ] M1-T6 — Congelamento e sobrescrita de regras
+### [x] M1-T6 — Congelamento e sobrescrita de regras
 **RNs:** RN-4.5, RN-4.6.
 **Entregáveis:** cópia dos parâmetros do pacote para `rule_*` na confirmação; tela de sobrescrita por festa com motivo → `audit_logs`.
 **Aceite:** critério do PRD — alterar o pacote depois não muda festa confirmada (teste de integração).

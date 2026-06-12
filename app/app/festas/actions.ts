@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 export type PartyActionState = { error: string } | null;
@@ -42,7 +43,11 @@ export async function confirmParty(
   formData: FormData,
 ): Promise<PartyActionState> {
   // M1: confirmação liberada com aviso; M2 exigirá contrato (RN-3.3/RN-9.1)
-  return setStatus(String(formData.get("id")), "confirmed");
+  const id = String(formData.get("id"));
+  const result = await setStatus(id, "confirmed");
+  if (result) return result;
+  // ?confirmada=1: a página dispara o evento party_confirmed (docs/06 §2)
+  redirect(`/app/festas/${id}?confirmada=1`);
 }
 
 export async function completeParty(
@@ -110,4 +115,64 @@ export async function reopenParty(
   formData: FormData,
 ): Promise<PartyActionState> {
   return auditAndSetStatus(formData, "confirmed", "reopen_party");
+}
+
+/** RN-4.6 — sobrescreve as regras congeladas de UMA festa, com auditoria. */
+export async function overridePartyRules(
+  _prev: PartyActionState,
+  formData: FormData,
+): Promise<PartyActionState> {
+  const id = String(formData.get("id") ?? "");
+  const reason = String(formData.get("reason") ?? "").trim();
+  const values = {
+    rule_exempt_age: Number(formData.get("rule_exempt_age")),
+    rule_adult_age: Number(formData.get("rule_adult_age")),
+    rule_adult_capacity: Number(formData.get("rule_adult_capacity")),
+    rule_child_capacity: Number(formData.get("rule_child_capacity")),
+    rule_extra_adult_price_cents: Number(formData.get("rule_extra_adult_price_cents")),
+    rule_extra_child_price_cents: Number(formData.get("rule_extra_child_price_cents")),
+  };
+
+  if (!reason) return { error: "Informe o motivo da sobrescrita." };
+  if (Object.values(values).some(Number.isNaN)) {
+    return { error: "Preencha todos os campos." };
+  }
+  if (values.rule_exempt_age >= values.rule_adult_age) {
+    return {
+      error: "A idade de isenção deve ser menor que a idade de adulto (RN-4.2).",
+    };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: party } = await supabase
+    .from("parties")
+    .select("tenant_id")
+    .eq("id", id)
+    .single();
+  if (!party) return { error: "Festa não encontrada." };
+
+  const { data, error } = await supabase
+    .from("parties")
+    .update(values)
+    .eq("id", id)
+    .select("id");
+  if (error || !data?.length) {
+    return { error: "Não foi possível sobrescrever as regras." };
+  }
+
+  await supabase.from("audit_logs").insert({
+    tenant_id: party.tenant_id,
+    user_id: user!.id,
+    action: "override_party_rules",
+    entity: "parties",
+    entity_id: id,
+    reason,
+    data: values,
+  });
+
+  revalidatePath(`/app/festas/${id}`);
+  return null;
 }

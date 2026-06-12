@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CaptureOnce } from "@/components/analytics/capture-once";
 import {
   buildMonthAgenda,
   monthLabelPt,
@@ -32,9 +33,9 @@ const STATUS_CLASS: Record<CellStatus, string> = {
 export default async function AgendaPage({
   searchParams,
 }: {
-  searchParams: Promise<{ mes?: string }>;
+  searchParams: Promise<{ mes?: string; criada?: string }>;
 }) {
-  const { mes } = await searchParams;
+  const { mes, criada } = await searchParams;
   const today = todayInSaoPaulo();
   const [yearStr, monthStr] = (mes ?? today.slice(0, 7)).split("-");
   const year = Number(yearStr);
@@ -71,6 +72,9 @@ export default async function AgendaPage({
 
   return (
     <main className="flex flex-col gap-6 p-6">
+      {criada === "1" && (
+        <CaptureOnce event="party_created" props={{ status: "budget" }} />
+      )}
       <header>
         <Link href="/app" className="text-muted-foreground text-sm underline">
           ← Painel

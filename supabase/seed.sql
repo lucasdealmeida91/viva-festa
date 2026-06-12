@@ -51,10 +51,43 @@ insert into public.shifts (tenant_id, weekday, label, starts_at, ends_at) values
 
 -- Pacotes (RN-4) — o "Festa Top" é o pacote do exemplo canônico do PRD
 insert into public.packages
-  (tenant_id, name, adult_capacity, child_capacity, base_price_cents,
+  (id, tenant_id, name, adult_capacity, child_capacity, base_price_cents,
    exempt_age, adult_age, extra_adult_price_cents, extra_child_price_cents)
 values
-  ('20000000-0000-4000-8000-000000000001', 'Pacote Festa Top',
+  ('30000000-0000-4000-8000-000000000001',
+   '20000000-0000-4000-8000-000000000001', 'Pacote Festa Top',
    50, 30, 550000, 8, 13, 9000, 5500),
-  ('20000000-0000-4000-8000-000000000001', 'Pacote Festa Mini',
+  ('30000000-0000-4000-8000-000000000002',
+   '20000000-0000-4000-8000-000000000001', 'Pacote Festa Mini',
    30, 20, 350000, 8, 13, 8000, 5000);
+
+-- Festas em vários status (NF-8): datas relativas a hoje, sempre em sábados
+-- futuros distintos. Confirmada já com regras congeladas (RN-4.5).
+with saturdays as (
+  select (current_date + ((6 - extract(dow from current_date)::int + 7) % 7)
+          + n * 7) as d, n
+  from generate_series(1, 3) n
+),
+shift as (
+  select id from public.shifts
+  where tenant_id = '20000000-0000-4000-8000-000000000001' and weekday = 6
+  order by starts_at limit 1
+)
+insert into public.parties
+  (tenant_id, package_id, shift_id, party_date, status, notes,
+   rule_exempt_age, rule_adult_age, rule_adult_capacity, rule_child_capacity,
+   rule_extra_adult_price_cents, rule_extra_child_price_cents)
+select
+  '20000000-0000-4000-8000-000000000001',
+  '30000000-0000-4000-8000-000000000001',
+  shift.id, saturdays.d,
+  case saturdays.n when 1 then 'budget'::public.party_status
+                   when 2 then 'reserved' else 'confirmed' end,
+  case saturdays.n when 1 then 'Interessada via Instagram' else null end,
+  case when saturdays.n = 3 then 8 end,
+  case when saturdays.n = 3 then 13 end,
+  case when saturdays.n = 3 then 50 end,
+  case when saturdays.n = 3 then 30 end,
+  case when saturdays.n = 3 then 9000 end,
+  case when saturdays.n = 3 then 5500 end
+from saturdays, shift;

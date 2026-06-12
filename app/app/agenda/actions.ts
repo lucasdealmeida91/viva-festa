@@ -32,5 +32,6 @@ export async function createBudget(
   });
   if (error) return { error: "Não foi possível criar o orçamento." };
 
-  redirect(`/app/agenda?mes=${partyDate.slice(0, 7)}`);
+  // &criada=1: a agenda dispara o evento party_created (docs/06 §2)
+  redirect(`/app/agenda?mes=${partyDate.slice(0, 7)}&criada=1`);
 }
