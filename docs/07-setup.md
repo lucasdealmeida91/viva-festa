@@ -18,7 +18,7 @@ Contas/serviços (uma vez, pelo fundador):
 | Supabase | Projeto cloud `vivafesta-prod` | F0-T1 |
 | Vercel | Projeto ligado ao repo GitHub | F0-T1 |
 | Sentry | Projeto Next.js — ✅ criado (org `o4511550096932864`) | F0-T5 |
-| PostHog | ✅ Projeto **346314** (org SLJC LTDA, US Cloud) | F0-T6 |
+| PostHog | ✅ Projeto **466868** (org dedicada VivaFesta, US Cloud) | F0-T6 |
 | Stripe | Conta + produtos: mensal R$ 197, anual R$ 1.970 | M5-T4 |
 | Domínio | `vivafesta.com.br` (pendência D-4 do PRD) | Antes do M3 (URLs públicas do convite) |
 
@@ -41,7 +41,7 @@ npm run dev                        # http://localhost:3000
 | `NEXT_PUBLIC_SUPABASE_URL` | pública | `npx supabase status` (dev) / projeto cloud (prod) |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | pública | idem — formato novo `sb_publishable_...` (substitui a anon key) |
 | `SUPABASE_SECRET_KEY` | server | `sb_secret_...` (substitui a service role) — webhooks, `/admin`, seed |
-| `NEXT_PUBLIC_POSTHOG_KEY` / `NEXT_PUBLIC_POSTHOG_HOST` | pública | Projeto 346314 (org SLJC), host `https://us.i.posthog.com` |
+| `NEXT_PUBLIC_POSTHOG_KEY` / `NEXT_PUBLIC_POSTHOG_HOST` | pública | Projeto 466868 (org VivaFesta), host `https://us.i.posthog.com` |
 | `NEXT_PUBLIC_SENTRY_DSN` | pública | Projeto Sentry |
 | `SENTRY_AUTH_TOKEN` | CI/build | Upload de source maps |
 | `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` | server | M5; test mode em dev/preview |
