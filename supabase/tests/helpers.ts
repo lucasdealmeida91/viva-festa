@@ -27,13 +27,17 @@ export function createAdminClient() {
 
 export const TEST_PASSWORD = "test-password-123";
 
-/** Creates a confirmed auth user via the admin API. Returns the user id. */
-export async function createTestUser(email: string) {
+/**
+ * Creates a confirmed auth user via the admin API. Returns the user id.
+ * The handle_new_user trigger creates the matching profile automatically.
+ */
+export async function createTestUser(email: string, fullName = "Test User") {
   const admin = createAdminClient();
   const { data, error } = await admin.auth.admin.createUser({
     email,
     password: TEST_PASSWORD,
     email_confirm: true,
+    user_metadata: { full_name: fullName },
   });
   if (error) throw error;
   return data.user.id;

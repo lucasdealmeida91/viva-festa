@@ -2,8 +2,8 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 /**
- * Refreshes the Supabase auth session on every request (called from proxy.ts).
- * Role-based route guards are added per surface starting at M0.
+ * Refreshes the Supabase auth session on every request (called from proxy.ts)
+ * and exposes the optimistic user for route guards.
  */
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -30,7 +30,9 @@ export async function updateSession(request: NextRequest) {
   );
 
   // Required: triggers the token refresh so server and client stay in sync.
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  return supabaseResponse;
+  return { response: supabaseResponse, user };
 }

@@ -44,12 +44,9 @@ beforeAll(async () => {
   tenantB = tB.id;
 
   for (const [key, email] of Object.entries(emails)) {
-    const userId = await createTestUser(email);
+    // profile criado pelo trigger handle_new_user (M0-T1)
+    const userId = await createTestUser(email, `Test ${key}`);
     userIds.push(userId);
-    const { error: profileError } = await admin
-      .from("profiles")
-      .insert({ user_id: userId, full_name: `Test ${key}` });
-    if (profileError) throw profileError;
 
     const tenantId = key.endsWith("B") ? tenantB : tenantA;
     const role = key.startsWith("manager") ? "manager" : "receptionist";

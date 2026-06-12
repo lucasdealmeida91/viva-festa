@@ -71,7 +71,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 
 ## M0 — Conta do buffet
 
-### [ ] M0-T1 — Cadastro e login
+### [x] M0-T1 — Cadastro e login
 **RNs:** RN-1.2.
 **Entregáveis:** páginas `(auth)` de cadastro, login e logout com Supabase Auth; criação do `profile`; redirecionamento pós-login (com tenant → `/app`; sem tenant → `/onboarding`).
 **Aceite:** ciclo cadastro → logout → login funciona; rotas protegidas exigem sessão.
