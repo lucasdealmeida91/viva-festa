@@ -139,7 +139,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** migrations `customers` + `birthday_children` (mês/ano apenas — LGPD); CRUD com vínculo de múltiplos aniversariantes; busca por nome/telefone.
 **Aceite:** não existe campo de data completa de nascimento em formulário nem em banco.
 
-### [ ] M2-T2 — Contrato na confirmação
+### [x] M2-T2 — Contrato na confirmação
 **RNs:** RN-9.1, RN-3.3.
 **Entregáveis:** migrations `contracts` + `installments`; fluxo de confirmação exige contrato; sugestão automática de parcelas mensais iguais entre confirmação e festa, editável; `lib/domain/installments.ts` (geração da sugestão, pura).
 **Aceite:** critério do PRD — não existe festa `confirmed` sem contrato (constraint + teste).

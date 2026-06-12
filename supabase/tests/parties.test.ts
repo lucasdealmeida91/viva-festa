@@ -97,6 +97,14 @@ describe("ciclo de vida da festa (RN-3)", () => {
     const party = await createParty("2027-03-06");
     expect(party.status).toBe("budget");
 
+    // M2-T2: confirmar exige contrato (RN-3.3)
+    await client.from("contracts").insert({
+      tenant_id: tenantId,
+      party_id: party.id,
+      total_cents: 0,
+      down_payment_cents: 0,
+    });
+
     for (const status of ["reserved", "confirmed", "completed"] as const) {
       const { data, error } = await client
         .from("parties")

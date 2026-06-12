@@ -91,3 +91,40 @@ select
   case when saturdays.n = 3 then 9000 end,
   case when saturdays.n = 3 then 5500 end
 from saturdays, shift;
+
+-- Cliente demo vinculado à festa confirmada + contrato com entrada paga,
+-- uma parcela vencida e uma futura (demo do financeiro M2)
+insert into public.customers (id, tenant_id, name, phone, email)
+values ('40000000-0000-4000-8000-000000000001',
+        '20000000-0000-4000-8000-000000000001',
+        'Maria Demo', '11 98888-0000', 'maria@cliente-demo.dev');
+
+insert into public.birthday_children (tenant_id, customer_id, name, birth_month, birth_year)
+values ('20000000-0000-4000-8000-000000000001',
+        '40000000-0000-4000-8000-000000000001', 'Aniversariante Demo', 7, 2020);
+
+update public.parties
+set customer_id = '40000000-0000-4000-8000-000000000001'
+where tenant_id = '20000000-0000-4000-8000-000000000001'
+  and status = 'confirmed';
+
+with confirmed_party as (
+  select id from public.parties
+  where tenant_id = '20000000-0000-4000-8000-000000000001'
+    and status = 'confirmed'
+  limit 1
+), new_contract as (
+  insert into public.contracts (tenant_id, party_id, total_cents, down_payment_cents)
+  select '20000000-0000-4000-8000-000000000001', id, 550000, 100000
+  from confirmed_party
+  returning id
+)
+insert into public.installments
+  (tenant_id, contract_id, kind, due_date, amount_cents, paid_at, payment_method)
+select '20000000-0000-4000-8000-000000000001', new_contract.id,
+       x.kind::public.installment_kind, x.due, x.amt, x.paid, x.method
+from new_contract, (values
+  ('down_payment', current_date - 30, 100000, now() - interval '30 days', 'PIX'),
+  ('regular', current_date - 2, 225000, null::timestamptz, null::text),
+  ('regular', current_date + 28, 225000, null::timestamptz, null::text)
+) as x(kind, due, amt, paid, method);

@@ -1,13 +1,13 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   cancelParty,
   completeParty,
-  confirmParty,
   reopenParty,
   reserveParty,
   type PartyActionState,
@@ -93,12 +93,17 @@ export function PartyActions({ id, status }: { id: string; status: Status }) {
         <SimpleTransition id={id} action={reserveParty} label="Reservar data" />
       )}
       {status === "reserved" && (
-        <SimpleTransition
-          id={id}
-          action={confirmParty}
-          label="Confirmar festa"
-          note="A partir do M2, confirmar exigirá contrato (RN-3.3)."
-        />
+        <div className="flex flex-col gap-1">
+          <Button
+            render={<Link href={`/app/festas/${id}/confirmar`} />}
+            className="self-start"
+          >
+            Confirmar festa
+          </Button>
+          <p className="text-muted-foreground text-xs">
+            Confirmar exige contrato (RN-3.3).
+          </p>
+        </div>
       )}
       {status === "confirmed" && (
         <SimpleTransition

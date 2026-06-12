@@ -74,6 +74,13 @@ describe("congelamento de regras (RN-4.5) — critério do M1", () => {
   it("confirmação copia os parâmetros do pacote para a festa", async () => {
     const client = await signInAs(manager);
     await client.from("parties").update({ status: "reserved" }).eq("id", partyId);
+    // M2-T2: confirmar exige contrato (RN-3.3)
+    await client.from("contracts").insert({
+      tenant_id: tenantId,
+      party_id: partyId,
+      total_cents: 0,
+      down_payment_cents: 0,
+    });
     await client
       .from("parties")
       .update({ status: "confirmed" })

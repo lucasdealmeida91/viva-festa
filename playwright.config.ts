@@ -6,10 +6,11 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   reporter: "list",
-  // Dev-server e2e compiles routes on first hit; cold compiles under full
-  // parallel load can stall well past the defaults.
   timeout: 60_000,
   expect: { timeout: 15_000 },
+  // Um único servidor atende todos os testes: limitar workers evita
+  // contenção de signups/navegação simultâneos.
+  workers: 4,
   use: {
     baseURL: "http://localhost:3000",
     trace: "on-first-retry",
@@ -21,9 +22,12 @@ export default defineConfig({
     // the only browser installed; add WebKit coverage if the M4 pilot needs it.
     { name: "mobile", use: { ...devices["Pixel 7"] } },
   ],
+  // Build de produção: o dev server recompila rota a rota e desmorona com a
+  // suite inteira em paralelo; o build é pago uma vez e o serve é estável.
   webServer: {
-    command: "npm run dev",
+    command: "npm run build && npm run start",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
+    timeout: 180_000,
   },
 });

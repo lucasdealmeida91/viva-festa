@@ -38,14 +38,46 @@ export async function reserveParty(
   return setStatus(String(formData.get("id")), "reserved");
 }
 
-export async function confirmParty(
+/** RN-3.3/RN-9.1 — confirmação atômica: contrato + parcelas + cliente. */
+export async function confirmWithContract(
   _prev: PartyActionState,
   formData: FormData,
 ): Promise<PartyActionState> {
-  // M1: confirmação liberada com aviso; M2 exigirá contrato (RN-3.3/RN-9.1)
-  const id = String(formData.get("id"));
-  const result = await setStatus(id, "confirmed");
-  if (result) return result;
+  const id = String(formData.get("id") ?? "");
+  const customerId = String(formData.get("customer_id") ?? "");
+  const totalCents = Number(formData.get("total_cents"));
+  const downPaymentCents = Number(formData.get("down_payment_cents"));
+  let installments: unknown;
+  try {
+    installments = JSON.parse(String(formData.get("installments") ?? "[]"));
+  } catch {
+    return { error: "Plano de parcelas inválido." };
+  }
+
+  if (!id || !customerId) return { error: "Escolha o cliente da festa." };
+  if (Number.isNaN(totalCents) || totalCents <= 0) {
+    return { error: "Informe o valor total do contrato." };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("confirm_party_with_contract", {
+    p_party_id: id,
+    p_customer_id: customerId,
+    p_total_cents: totalCents,
+    p_down_payment_cents: downPaymentCents,
+    p_installments: installments as never,
+  });
+
+  if (error) {
+    if (error.code === "23505") {
+      return { error: "Já existe festa reservada/confirmada neste turno (RN-2.4)." };
+    }
+    if (error.message.includes("installments_sum_mismatch")) {
+      return { error: "A soma das parcelas precisa fechar com o total." };
+    }
+    return { error: "Não foi possível confirmar a festa." };
+  }
+
   // ?confirmada=1: a página dispara o evento party_confirmed (docs/06 §2)
   redirect(`/app/festas/${id}?confirmada=1`);
 }

@@ -123,6 +123,54 @@ export type Database = {
           },
         ]
       }
+      contracts: {
+        Row: {
+          created_at: string
+          down_payment_cents: number
+          id: string
+          notes: string | null
+          party_id: string
+          tenant_id: string
+          total_cents: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          down_payment_cents?: number
+          id?: string
+          notes?: string | null
+          party_id: string
+          tenant_id: string
+          total_cents: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          down_payment_cents?: number
+          id?: string
+          notes?: string | null
+          party_id?: string
+          tenant_id?: string
+          total_cents?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contracts_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: true
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contracts_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       customers: {
         Row: {
           auth_user_id: string | null
@@ -157,6 +205,60 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "customers_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      installments: {
+        Row: {
+          amount_cents: number
+          contract_id: string
+          created_at: string
+          due_date: string
+          id: string
+          kind: Database["public"]["Enums"]["installment_kind"]
+          paid_at: string | null
+          payment_method: string | null
+          payment_note: string | null
+          tenant_id: string
+        }
+        Insert: {
+          amount_cents: number
+          contract_id: string
+          created_at?: string
+          due_date: string
+          id?: string
+          kind?: Database["public"]["Enums"]["installment_kind"]
+          paid_at?: string | null
+          payment_method?: string | null
+          payment_note?: string | null
+          tenant_id: string
+        }
+        Update: {
+          amount_cents?: number
+          contract_id?: string
+          created_at?: string
+          due_date?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["installment_kind"]
+          paid_at?: string | null
+          payment_method?: string | null
+          payment_note?: string | null
+          tenant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "installments_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "installments_tenant_id_fkey"
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
@@ -261,7 +363,9 @@ export type Database = {
       }
       parties: {
         Row: {
+          birthday_child_id: string | null
           created_at: string
+          customer_id: string | null
           id: string
           notes: string | null
           package_id: string
@@ -278,7 +382,9 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          birthday_child_id?: string | null
           created_at?: string
+          customer_id?: string | null
           id?: string
           notes?: string | null
           package_id: string
@@ -295,7 +401,9 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          birthday_child_id?: string | null
           created_at?: string
+          customer_id?: string | null
           id?: string
           notes?: string | null
           package_id?: string
@@ -312,6 +420,20 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "parties_birthday_child_id_fkey"
+            columns: ["birthday_child_id"]
+            isOneToOne: false
+            referencedRelation: "birthday_children"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parties_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "parties_package_id_fkey"
             columns: ["package_id"]
@@ -462,12 +584,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      confirm_party_with_contract: {
+        Args: {
+          p_customer_id: string
+          p_down_payment_cents: number
+          p_installments: Json
+          p_party_id: string
+          p_total_cents: number
+        }
+        Returns: string
+      }
       create_tenant: {
         Args: { p_name: string; p_slug: string }
         Returns: string
       }
     }
     Enums: {
+      installment_kind: "down_payment" | "regular" | "overage"
       membership_role: "manager" | "receptionist"
       party_status:
         | "budget"
@@ -612,6 +745,7 @@ export const Constants = {
   },
   public: {
     Enums: {
+      installment_kind: ["down_payment", "regular", "overage"],
       membership_role: ["manager", "receptionist"],
       party_status: [
         "budget",

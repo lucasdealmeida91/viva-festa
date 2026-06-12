@@ -35,7 +35,10 @@ export default async function FestaPage({
        rule_child_capacity, rule_extra_adult_price_cents,
        rule_extra_child_price_cents,
        packages (name, base_price_cents, adult_capacity, child_capacity),
-       shifts (label, starts_at, ends_at)`,
+       shifts (label, starts_at, ends_at),
+       customers (id, name),
+       contracts (total_cents, down_payment_cents,
+         installments (id, kind, due_date, amount_cents, paid_at))`,
     )
     .eq("id", id)
     .single();
@@ -90,6 +93,19 @@ export default async function FestaPage({
             <dd>{party.notes}</dd>
           </>
         )}
+        {party.customers && (
+          <>
+            <dt className="text-muted-foreground">Cliente</dt>
+            <dd>
+              <Link
+                href={`/app/clientes/${party.customers.id}`}
+                className="underline"
+              >
+                {party.customers.name}
+              </Link>
+            </dd>
+          </>
+        )}
         {frozen && (
           <>
             <dt className="text-muted-foreground">Regras congeladas (RN-4.5)</dt>
@@ -103,6 +119,36 @@ export default async function FestaPage({
           </>
         )}
       </dl>
+
+      {party.contracts && (
+        <section className="max-w-md rounded-md border p-4">
+          <h2 className="text-base font-semibold">Contrato (RN-9.1)</h2>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Total {formatCurrencyBRL(party.contracts.total_cents)} · entrada{" "}
+            {formatCurrencyBRL(party.contracts.down_payment_cents)}
+          </p>
+          <ul className="mt-2 flex flex-col gap-1 text-sm">
+            {party.contracts.installments
+              .sort((a, b) => a.due_date.localeCompare(b.due_date))
+              .map((installment) => (
+                <li key={installment.id} className="flex justify-between">
+                  <span>
+                    {installment.kind === "down_payment"
+                      ? "Entrada"
+                      : installment.kind === "overage"
+                        ? "Excedente"
+                        : "Parcela"}{" "}
+                    · {formatDateBR(installment.due_date)}
+                  </span>
+                  <span>
+                    {formatCurrencyBRL(installment.amount_cents)}
+                    {installment.paid_at ? " ✓" : ""}
+                  </span>
+                </li>
+              ))}
+          </ul>
+        </section>
+      )}
 
       <PartyActions id={party.id} status={party.status} />
       {frozen && <RulesOverride partyId={party.id} rules={frozen} />}
