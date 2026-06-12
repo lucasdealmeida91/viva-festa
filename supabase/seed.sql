@@ -48,3 +48,13 @@ insert into public.shifts (tenant_id, weekday, label, starts_at, ends_at) values
   ('20000000-0000-4000-8000-000000000001', 6, 'Sábado almoço', '12:00', '16:00'),
   ('20000000-0000-4000-8000-000000000001', 6, 'Sábado noite', '18:00', '22:00'),
   ('20000000-0000-4000-8000-000000000001', 0, 'Domingo almoço', '12:00', '16:00');
+
+-- Pacotes (RN-4) — o "Festa Top" é o pacote do exemplo canônico do PRD
+insert into public.packages
+  (tenant_id, name, adult_capacity, child_capacity, base_price_cents,
+   exempt_age, adult_age, extra_adult_price_cents, extra_child_price_cents)
+values
+  ('20000000-0000-4000-8000-000000000001', 'Pacote Festa Top',
+   50, 30, 550000, 8, 13, 9000, 5500),
+  ('20000000-0000-4000-8000-000000000001', 'Pacote Festa Mini',
+   30, 20, 350000, 8, 13, 8000, 5000);

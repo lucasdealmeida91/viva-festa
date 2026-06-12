@@ -102,7 +102,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** `lib/domain/classify.ts` (idade + regras → `exempt | child | adult`; sem idade → `adult` + flag de revisão) e `lib/domain/overage.ts` (`max(0, presentes − contratado)` por categoria, sem compensação entre categorias).
 **Aceite:** **caso canônico retorna exatamente R$ 360** (54 adultos/50 + 28 crianças/30 + 9 isentos, R$ 90/55) — [05-testes.md](05-testes.md) §2. Suite cobre bordas: idade igual aos cortes, isenção 0, sem idade.
 
-### [ ] M1-T2 — CRUD de pacotes
+### [x] M1-T2 — CRUD de pacotes
 **RNs:** RN-4 (campos), RN-4.2 (validação).
 **Entregáveis:** migration `packages` + RLS; telas de listagem/forma; arquivamento (não exclusão).
 **Aceite:** impossível salvar `exempt_age >= adult_age` (validação na UI **e** CHECK no banco).

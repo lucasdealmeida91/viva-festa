@@ -73,6 +73,62 @@ export type Database = {
           },
         ]
       }
+      packages: {
+        Row: {
+          adult_age: number
+          adult_capacity: number
+          archived: boolean
+          base_price_cents: number
+          child_capacity: number
+          created_at: string
+          exempt_age: number
+          extra_adult_price_cents: number
+          extra_child_price_cents: number
+          id: string
+          name: string
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          adult_age: number
+          adult_capacity: number
+          archived?: boolean
+          base_price_cents: number
+          child_capacity: number
+          created_at?: string
+          exempt_age: number
+          extra_adult_price_cents: number
+          extra_child_price_cents: number
+          id?: string
+          name: string
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          adult_age?: number
+          adult_capacity?: number
+          archived?: boolean
+          base_price_cents?: number
+          child_capacity?: number
+          created_at?: string
+          exempt_age?: number
+          extra_adult_price_cents?: number
+          extra_child_price_cents?: number
+          id?: string
+          name?: string
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "packages_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string

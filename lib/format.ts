@@ -21,3 +21,13 @@ export function formatCurrencyBRL(cents: number): string {
     currency: "BRL",
   }).format(cents / 100);
 }
+
+/** "5500.00" ou "5500,00" → 550000 (centavos). NaN para entrada inválida. */
+export function parseDecimalToCents(value: string): number {
+  const normalized = value.trim().replace(/\./g, (m, offset, str) =>
+    // "5.500,00": pontos de milhar somem; "5500.00": ponto decimal fica
+    str.includes(",") ? "" : m,
+  );
+  const parsed = Number.parseFloat(normalized.replace(",", "."));
+  return Number.isNaN(parsed) ? NaN : Math.round(parsed * 100);
+}

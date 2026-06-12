@@ -47,7 +47,10 @@ export default async function PainelPage({
       <p className="text-muted-foreground mt-4">
         Agenda, festas, pacotes, clientes e financeiro — em construção (M1+).
       </p>
-      <nav className="mt-6">
+      <nav className="mt-6 flex gap-4">
+        <Link href="/app/pacotes" className="underline">
+          Pacotes
+        </Link>
         <Link href="/app/configuracoes" className="underline">
           Configurações do buffet
         </Link>
