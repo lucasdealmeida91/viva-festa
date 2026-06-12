@@ -31,5 +31,6 @@ export async function createTenant(
     };
   }
 
-  redirect("/app");
+  // ?novo=1: o painel dispara o evento tenant_created (docs/06 §2)
+  redirect("/app?novo=1");
 }

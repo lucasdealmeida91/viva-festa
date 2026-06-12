@@ -17,7 +17,7 @@ test("gestor configura turnos de sábado e domingo (M0-T3 / critério M0)", asyn
   await page.getByLabel("Nome do buffet").fill("Buffet Config E2E");
   await page.getByLabel("Endereço da página").fill(`cfg-${runId}-${project}`);
   await page.getByRole("button", { name: "Criar buffet" }).click();
-  await expect(page).toHaveURL(/\/app$/);
+  await expect(page).toHaveURL(/\/app(\?.*)?$/);
 
   // configurações
   await page.getByRole("link", { name: "Configurações do buffet" }).click();

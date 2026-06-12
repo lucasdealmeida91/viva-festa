@@ -20,7 +20,7 @@ test("cadastro → onboarding → painel do buffet (M0-T2)", async ({
   await page.getByLabel("Endereço da página").fill(`estrela-${runId}-${project}`);
   await page.getByRole("button", { name: "Criar buffet" }).click();
 
-  await expect(page).toHaveURL(/\/app$/);
+  await expect(page).toHaveURL(/\/app(\?.*)?$/);
   await expect(
     page.getByRole("heading", { name: "Painel do buffet" }),
   ).toBeVisible();

@@ -41,7 +41,7 @@ test("gestor convida recepcionista, que só acessa o check-in (critério M0)", a
   await page.getByLabel("Nome do buffet").fill("Buffet Convites");
   await page.getByLabel("Endereço da página").fill(`conv-${runId}-${project}`);
   await page.getByRole("button", { name: "Criar buffet" }).click();
-  await expect(page).toHaveURL(/\/app$/);
+  await expect(page).toHaveURL(/\/app(\?.*)?$/);
 
   // convite
   await page.goto("/app/configuracoes");
