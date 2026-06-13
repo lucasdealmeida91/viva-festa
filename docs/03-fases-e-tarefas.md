@@ -188,7 +188,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** configuração por festa: lista fechada (padrão) / aberta (`origin=self_registered`); `rsvp_deadline`; após o prazo a página vira somente-informativa.
 **Aceite:** critério do PRD — após o prazo, nenhuma ação de confirmação é aceita (testar pela RPC, não só pela UI).
 
-### [ ] M3-T6 — e2e do convite
+### [x] M3-T6 — e2e do convite
 **Entregáveis:** Playwright mobile viewport: abrir convite → buscar nome → confirmar com acompanhantes → verificar totalizadores; teste de privacidade da API (RN-6.4).
 **Aceite:** suite verde no CI.
 
