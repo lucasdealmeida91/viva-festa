@@ -83,6 +83,22 @@ test("confirmação exige contrato com plano de parcelas (M2-T2)", async ({
   await page.getByRole("button", { name: "Confirmar pagamento" }).click();
   await expect(page.getByText(/Paga \(PIX\)/)).toBeVisible();
 
+  // M2-T4: painel financeiro reflete o recebimento do mês
+  await page.goto("/app/financeiro");
+  const recebidoCard = page
+    .locator("div")
+    .filter({ hasText: /^Recebido no mês/ })
+    .first();
+  await expect(recebidoCard).toContainText("1.000,00");
+  await expect(page.getByText("Nenhuma parcela vencida. 🎉")).toBeVisible();
+
+  // volta à festa pela agenda para o estorno
+  await page.goto("/app/agenda");
+  await page
+    .getByRole("link", { name: /Sábado tarde .* Confirmada/ })
+    .first()
+    .click();
+
   // estorno com motivo (auditado) — o painel pode já estar aberto (estado
   // do client component sobrevive ao refresh RSC)
   const motivoEstorno = page.getByLabel("Motivo do estorno");
