@@ -144,7 +144,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** migrations `contracts` + `installments`; fluxo de confirmação exige contrato; sugestão automática de parcelas mensais iguais entre confirmação e festa, editável; `lib/domain/installments.ts` (geração da sugestão, pura).
 **Aceite:** critério do PRD — não existe festa `confirmed` sem contrato (constraint + teste).
 
-### [ ] M2-T3 — Registro de pagamento
+### [x] M2-T3 — Registro de pagamento
 **RNs:** RN-9.2, RN-9.3.
 **Entregáveis:** marcar parcela paga (data, forma, observação); desfazer com auditoria; status "vencida" derivado em query/view — nunca coluna.
 **Aceite:** parcela não paga com vencimento ontem aparece como vencida com 1 dia de atraso.

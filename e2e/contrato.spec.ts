@@ -72,4 +72,28 @@ test("confirmação exige contrato com plano de parcelas (M2-T2)", async ({
   await expect(page.getByText("Contrato (RN-9.1)")).toBeVisible();
   await expect(page.getByText(/Entrada · /)).toBeVisible();
   await expect(page.getByText("Maria Contratos")).toBeVisible();
+
+  // M2-T3: registrar pagamento da entrada
+  await page
+    .getByRole("listitem")
+    .filter({ hasText: "Entrada" })
+    .getByRole("button", { name: "Registrar pagamento" })
+    .click();
+  await page.getByLabel("Forma").selectOption("PIX");
+  await page.getByRole("button", { name: "Confirmar pagamento" }).click();
+  await expect(page.getByText(/Paga \(PIX\)/)).toBeVisible();
+
+  // estorno com motivo (auditado) — o painel pode já estar aberto (estado
+  // do client component sobrevive ao refresh RSC)
+  const motivoEstorno = page.getByLabel("Motivo do estorno");
+  if (!(await motivoEstorno.isVisible())) {
+    await page
+      .getByRole("listitem")
+      .filter({ hasText: "Entrada" })
+      .getByRole("button", { name: "Estornar" })
+      .click();
+  }
+  await motivoEstorno.fill("Registro errado");
+  await page.getByRole("button", { name: "Desfazer pagamento" }).click();
+  await expect(page.getByText(/Paga \(PIX\)/)).not.toBeVisible();
 });

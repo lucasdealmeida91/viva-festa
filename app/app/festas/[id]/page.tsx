@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CaptureOnce } from "@/components/analytics/capture-once";
+import { InstallmentsList } from "@/components/festas/installments-list";
 import { PartyActions } from "@/components/festas/party-actions";
 import {
   RulesOverride,
@@ -38,7 +39,7 @@ export default async function FestaPage({
        shifts (label, starts_at, ends_at),
        customers (id, name),
        contracts (total_cents, down_payment_cents,
-         installments (id, kind, due_date, amount_cents, paid_at))`,
+         installments (id, kind, due_date, amount_cents, paid_at, payment_method))`,
     )
     .eq("id", id)
     .single();
@@ -127,26 +128,10 @@ export default async function FestaPage({
             Total {formatCurrencyBRL(party.contracts.total_cents)} · entrada{" "}
             {formatCurrencyBRL(party.contracts.down_payment_cents)}
           </p>
-          <ul className="mt-2 flex flex-col gap-1 text-sm">
-            {party.contracts.installments
-              .sort((a, b) => a.due_date.localeCompare(b.due_date))
-              .map((installment) => (
-                <li key={installment.id} className="flex justify-between">
-                  <span>
-                    {installment.kind === "down_payment"
-                      ? "Entrada"
-                      : installment.kind === "overage"
-                        ? "Excedente"
-                        : "Parcela"}{" "}
-                    · {formatDateBR(installment.due_date)}
-                  </span>
-                  <span>
-                    {formatCurrencyBRL(installment.amount_cents)}
-                    {installment.paid_at ? " ✓" : ""}
-                  </span>
-                </li>
-              ))}
-          </ul>
+          <InstallmentsList
+            installments={party.contracts.installments}
+            partyId={party.id}
+          />
         </section>
       )}
 
