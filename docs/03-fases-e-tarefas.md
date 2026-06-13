@@ -149,7 +149,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** marcar parcela paga (data, forma, observação); desfazer com auditoria; status "vencida" derivado em query/view — nunca coluna.
 **Aceite:** parcela não paga com vencimento ontem aparece como vencida com 1 dia de atraso.
 
-### [ ] M2-T4 — Painel financeiro mínimo
+### [x] M2-T4 — Painel financeiro mínimo
 **RNs:** RN-9.4.
 **Entregáveis:** home financeira: a receber no mês, recebido no mês, vencidas (cliente, festa, dias de atraso).
 **Aceite:** critério do PRD — números batem com seed de cenários ([05-testes.md](05-testes.md)).

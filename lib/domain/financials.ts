@@ -29,6 +29,34 @@ export function installmentStatus(
   return { status: "pending", daysOverdue: 0 };
 }
 
+export type FinanceConsolidation = {
+  totalCents: number;
+  paidCents: number;
+  pendingCents: number;
+  overdueCents: number;
+};
+
+/** RN-10.2 — situação financeira consolidada (ficha do cliente). */
+export function consolidateFinance(
+  installments: InstallmentLike[],
+  today: string,
+): FinanceConsolidation {
+  const result: FinanceConsolidation = {
+    totalCents: 0,
+    paidCents: 0,
+    pendingCents: 0,
+    overdueCents: 0,
+  };
+  for (const installment of installments) {
+    result.totalCents += installment.amount_cents;
+    const { status } = installmentStatus(installment, today);
+    if (status === "paid") result.paidCents += installment.amount_cents;
+    else if (status === "overdue") result.overdueCents += installment.amount_cents;
+    else result.pendingCents += installment.amount_cents;
+  }
+  return result;
+}
+
 export type MonthSummary = {
   /** Pendentes com vencimento dentro do mês (inclui as vencidas do mês). */
   dueInMonthCents: number;

@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { installmentStatus, summarizeMonth } from "./financials";
+import {
+  consolidateFinance,
+  installmentStatus,
+  summarizeMonth,
+} from "./financials";
 
 const today = "2026-06-12";
 
@@ -26,6 +30,25 @@ describe("installmentStatus (RN-9.2)", () => {
       today,
     );
     expect(result.status).toBe("pending");
+  });
+});
+
+describe("consolidateFinance (RN-10.2)", () => {
+  it("consolida pago, pendente e vencido", () => {
+    const result = consolidateFinance(
+      [
+        { due_date: "2026-05-01", amount_cents: 100000, paid_at: "2026-05-01" },
+        { due_date: "2026-06-10", amount_cents: 30000, paid_at: null },
+        { due_date: "2026-07-10", amount_cents: 70000, paid_at: null },
+      ],
+      today,
+    );
+    expect(result).toEqual({
+      totalCents: 200000,
+      paidCents: 100000,
+      overdueCents: 30000,
+      pendingCents: 70000,
+    });
   });
 });
 
