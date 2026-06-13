@@ -216,7 +216,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** ação de encerrar (só gestor): ausentes em massa → `closing_snapshot` → cálculo via `lib/domain/overage` → status `completed`; tela de decisão do excedente (confirmar/ajustar com justificativa/dispensar) → `audit_logs`.
 **Aceite:** snapshot bate com o painel; decisão registrada com auditoria; festa encerrada imutável (RN-3.4).
 
-### [ ] M4-T5 — Relatório pós-festa + parcela de excedente
+### [x] M4-T5 — Relatório pós-festa + parcela de excedente
 **RNs:** RN-8.3, RN-9.5.
 **Entregáveis:** relatório: contratado vs. presente por categoria, valor, lista nominal com classificação, walk-ins destacados; versão imprimível (CSS print); lançar excedente confirmado como `installment kind=overage` com vencimento escolhido.
 **Aceite:** critério do PRD — relatório bate com o painel de contagem; parcela aparece no financeiro.

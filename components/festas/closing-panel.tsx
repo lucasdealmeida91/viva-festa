@@ -1,13 +1,16 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { formatCurrencyBRL } from "@/lib/format";
+import { formatCurrencyBRL, todayInSaoPaulo } from "@/lib/format";
 import {
   closeParty,
   decideOverage,
+  launchOverageInstallment,
+  shareReport,
   type ClosingState,
 } from "@/app/app/festas/closing-actions";
 
@@ -38,6 +41,10 @@ export function ClosingPanel({ partyId, status, overage }: ClosingPanelProps) {
     ClosingState,
     FormData
   >(decideOverage, null);
+  const [launchState, launchAction, launching] = useActionState<
+    ClosingState,
+    FormData
+  >(launchOverageInstallment, null);
 
   if (status === "confirmed") {
     return (
@@ -113,6 +120,44 @@ export function ClosingPanel({ partyId, status, overage }: ClosingPanelProps) {
           </Button>
         </form>
       )}
+
+      <div className="flex flex-wrap items-center gap-3">
+        <Button render={<Link href={`/app/festas/${partyId}/relatorio`} />} variant="outline">
+          Ver relatório pós-festa
+        </Button>
+        <form action={shareReport}>
+          <input type="hidden" name="party_id" value={partyId} />
+          <Button type="submit" variant="ghost" size="sm">
+            Compartilhar com o cliente
+          </Button>
+        </form>
+      </div>
+
+      {/* RN-9.5 — lançar excedente confirmado/ajustado como parcela */}
+      {(overage.decision === "confirmed" || overage.decision === "adjusted") &&
+        total > 0 && (
+          <form action={launchAction} className="flex items-end gap-2 rounded-md border p-3">
+            <input type="hidden" name="party_id" value={partyId} />
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="overage-due">Lançar excedente como parcela, vencendo em</Label>
+              <Input
+                id="overage-due"
+                name="due_date"
+                type="date"
+                defaultValue={todayInSaoPaulo()}
+                required
+              />
+            </div>
+            <Button type="submit" disabled={launching}>
+              {launching ? "Lançando…" : "Lançar parcela"}
+            </Button>
+            {launchState?.error && (
+              <p role="alert" className="text-destructive w-full text-sm">
+                {launchState.error}
+              </p>
+            )}
+          </form>
+        )}
     </section>
   );
 }

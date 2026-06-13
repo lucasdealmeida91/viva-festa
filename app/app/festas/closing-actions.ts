@@ -83,6 +83,51 @@ export async function closeParty(
   return null;
 }
 
+/** RN-9.5 — lança o excedente confirmado como parcela do contrato. */
+export async function launchOverageInstallment(
+  _prev: ClosingState,
+  formData: FormData,
+): Promise<ClosingState> {
+  const partyId = String(formData.get("party_id") ?? "");
+  const dueDate = String(formData.get("due_date") ?? "");
+  if (!partyId || !dueDate) return { error: "Informe a data de vencimento." };
+
+  const supabase = await createClient();
+  const { data: party } = await supabase
+    .from("parties")
+    .select("tenant_id, overage_total_cents, contracts (id)")
+    .eq("id", partyId)
+    .single();
+  if (!party?.contracts) return { error: "Contrato não encontrado." };
+  if (!party.overage_total_cents || party.overage_total_cents <= 0) {
+    return { error: "Não há excedente a lançar." };
+  }
+
+  const { error } = await supabase.from("installments").insert({
+    tenant_id: party.tenant_id,
+    contract_id: party.contracts.id,
+    kind: "overage",
+    due_date: dueDate,
+    amount_cents: party.overage_total_cents,
+  });
+  if (error) return { error: "Não foi possível lançar a parcela." };
+
+  revalidatePath(`/app/festas/${partyId}`);
+  return null;
+}
+
+/** RN-8.3 — libera o relatório pós-festa para o cliente final (espaço M5). */
+export async function shareReport(formData: FormData) {
+  const partyId = String(formData.get("party_id") ?? "");
+  if (!partyId) return;
+  const supabase = await createClient();
+  await supabase
+    .from("parties")
+    .update({ report_shared_with_customer: true })
+    .eq("id", partyId);
+  revalidatePath(`/app/festas/${partyId}`);
+}
+
 export async function decideOverage(
   _prev: ClosingState,
   formData: FormData,
