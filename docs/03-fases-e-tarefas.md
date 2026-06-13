@@ -221,7 +221,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** relatório: contratado vs. presente por categoria, valor, lista nominal com classificação, walk-ins destacados; versão imprimível (CSS print); lançar excedente confirmado como `installment kind=overage` com vencimento escolhido.
 **Aceite:** critério do PRD — relatório bate com o painel de contagem; parcela aparece no financeiro.
 
-### [ ] M4-T6 — e2e do dia da festa
+### [x] M4-T6 — e2e do dia da festa
 **Entregáveis:** Playwright simulando o critério do PRD: festa com 40+ convidados, check-ins, 2 walk-ins, 1 desfazer, queda de rede, encerramento, relatório com excedente correto.
 **Aceite:** suite verde; **a partir daqui o produto está pronto para piloto com design partner.**
 
