@@ -196,7 +196,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 
 ## M4 — Check-in, encerramento e excedente ⭐
 
-### [ ] M4-T1 — Check-in: busca e marcação
+### [x] M4-T1 — Check-in: busca e marcação
 **RNs:** RN-7.1, RN-7.2, RN-7.4, RN-1.3.
 **Entregáveis:** `/checkin`: lista de festas hoje/amanhã; busca instantânea por nome; marcar presente (1 toque); marcar grupo inteiro; desfazer; RLS do recepcionista validada.
 **Aceite:** uso com uma mão em viewport 390px; desfazer funciona até o encerramento.

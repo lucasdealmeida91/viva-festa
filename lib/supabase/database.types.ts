@@ -724,6 +724,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      checkin_add_walkin: {
+        Args: { p_age?: number; p_name: string; p_party_id: string }
+        Returns: string
+      }
+      checkin_group: {
+        Args: { p_group_id: string; p_present: boolean }
+        Returns: undefined
+      }
+      checkin_set_present: {
+        Args: { p_guest_id: string; p_present: boolean }
+        Returns: undefined
+      }
       confirm_party_with_contract: {
         Args: {
           p_customer_id: string
