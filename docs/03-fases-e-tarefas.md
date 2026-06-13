@@ -173,7 +173,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** agrupamento por família/grupo; totalizadores contratado vs. esperado por categoria usando `lib/domain/classify`; destaque para convidado sem idade.
 **Aceite:** totalizadores corretos com o seed.
 
-### [ ] M3-T3 — Página pública do convite
+### [x] M3-T3 — Página pública do convite
 **RNs:** RN-6.1, RN-6.2, RN-6.4.
 **Entregáveis:** rota `/[tenantSlug]/[inviteToken]`; RPC `get_invite` (AD-5); geração do `invite_token` na confirmação; publicar/despublicar; mobile-first.
 **Aceite:** critério do PRD — resposta da RPC não contém lista de convidados, telefones nem status de terceiros (**teste de API**, não só UI).

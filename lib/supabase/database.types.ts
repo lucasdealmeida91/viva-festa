@@ -488,10 +488,15 @@ export type Database = {
           birthday_child_id: string | null
           created_at: string
           customer_id: string | null
+          host_message: string | null
           id: string
+          invite_published: boolean
+          invite_token: string | null
+          list_mode: Database["public"]["Enums"]["list_mode"]
           notes: string | null
           package_id: string
           party_date: string
+          rsvp_deadline: string | null
           rule_adult_age: number | null
           rule_adult_capacity: number | null
           rule_child_capacity: number | null
@@ -501,16 +506,22 @@ export type Database = {
           shift_id: string
           status: Database["public"]["Enums"]["party_status"]
           tenant_id: string
+          turning_age: number | null
           updated_at: string
         }
         Insert: {
           birthday_child_id?: string | null
           created_at?: string
           customer_id?: string | null
+          host_message?: string | null
           id?: string
+          invite_published?: boolean
+          invite_token?: string | null
+          list_mode?: Database["public"]["Enums"]["list_mode"]
           notes?: string | null
           package_id: string
           party_date: string
+          rsvp_deadline?: string | null
           rule_adult_age?: number | null
           rule_adult_capacity?: number | null
           rule_child_capacity?: number | null
@@ -520,16 +531,22 @@ export type Database = {
           shift_id: string
           status?: Database["public"]["Enums"]["party_status"]
           tenant_id: string
+          turning_age?: number | null
           updated_at?: string
         }
         Update: {
           birthday_child_id?: string | null
           created_at?: string
           customer_id?: string | null
+          host_message?: string | null
           id?: string
+          invite_published?: boolean
+          invite_token?: string | null
+          list_mode?: Database["public"]["Enums"]["list_mode"]
           notes?: string | null
           package_id?: string
           party_date?: string
+          rsvp_deadline?: string | null
           rule_adult_age?: number | null
           rule_adult_capacity?: number | null
           rule_child_capacity?: number | null
@@ -539,6 +556,7 @@ export type Database = {
           shift_id?: string
           status?: Database["public"]["Enums"]["party_status"]
           tenant_id?: string
+          turning_age?: number | null
           updated_at?: string
         }
         Relationships: [
@@ -720,11 +738,30 @@ export type Database = {
         Args: { p_name: string; p_slug: string }
         Returns: string
       }
+      get_invite: {
+        Args: { p_slug: string; p_token: string }
+        Returns: {
+          birthday_child_name: string
+          buffet_address: string
+          buffet_name: string
+          host_message: string
+          list_mode: Database["public"]["Enums"]["list_mode"]
+          party_date: string
+          party_id: string
+          rsvp_deadline: string
+          rsvp_open: boolean
+          shift_ends_at: string
+          shift_label: string
+          shift_starts_at: string
+          turning_age: number
+        }[]
+      }
     }
     Enums: {
       attendance_status: "present" | "absent"
       guest_origin: "host" | "companion" | "self_registered" | "walk_in"
       installment_kind: "down_payment" | "regular" | "overage"
+      list_mode: "closed" | "open"
       membership_role: "manager" | "receptionist"
       party_status:
         | "budget"
@@ -873,6 +910,7 @@ export const Constants = {
       attendance_status: ["present", "absent"],
       guest_origin: ["host", "companion", "self_registered", "walk_in"],
       installment_kind: ["down_payment", "regular", "overage"],
+      list_mode: ["closed", "open"],
       membership_role: ["manager", "receptionist"],
       party_status: [
         "budget",

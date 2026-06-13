@@ -104,7 +104,17 @@ values ('20000000-0000-4000-8000-000000000001',
         '40000000-0000-4000-8000-000000000001', 'Aniversariante Demo', 7, 2020);
 
 update public.parties
-set customer_id = '40000000-0000-4000-8000-000000000001'
+set customer_id = '40000000-0000-4000-8000-000000000001',
+    birthday_child_id = (
+      select id from public.birthday_children
+      where customer_id = '40000000-0000-4000-8000-000000000001' limit 1
+    ),
+    -- convite publicado para demo/e2e: vivafesta.com.br/buffet-alegria/demo-convite
+    invite_token = 'demo-convite',
+    invite_published = true,
+    turning_age = 6,
+    host_message = 'Venha comemorar com a gente!',
+    rsvp_deadline = current_date + 60
 where tenant_id = '20000000-0000-4000-8000-000000000001'
   and status = 'confirmed';
 
