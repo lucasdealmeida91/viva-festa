@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { RsvpForm } from "@/components/convite/rsvp-form";
 import { formatDateBR, formatTime } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 
@@ -46,9 +47,11 @@ export default async function ConvitePage({ params }: ConvitePageProps) {
       )}
 
       {data.rsvp_open ? (
-        <p className="text-muted-foreground text-sm">
-          Confirmação de presença — em breve (M3-T4).
-        </p>
+        <RsvpForm
+          slug={tenantSlug}
+          token={inviteToken}
+          listMode={data.list_mode}
+        />
       ) : (
         <p className="text-muted-foreground text-sm">
           O prazo de confirmação encerrou.

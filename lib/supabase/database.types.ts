@@ -738,6 +738,15 @@ export type Database = {
         Args: { p_name: string; p_slug: string }
         Returns: string
       }
+      find_guest: {
+        Args: { p_name: string; p_slug: string; p_token: string }
+        Returns: {
+          group_name: string
+          guest_id: string
+          guest_name: string
+          rsvp_status: Database["public"]["Enums"]["rsvp_status"]
+        }[]
+      }
       get_invite: {
         Args: { p_slug: string; p_token: string }
         Returns: {
@@ -755,6 +764,17 @@ export type Database = {
           shift_starts_at: string
           turning_age: number
         }[]
+      }
+      submit_rsvp: {
+        Args: {
+          p_companions?: Json
+          p_guest_id?: string
+          p_guest_name?: string
+          p_response: Database["public"]["Enums"]["rsvp_status"]
+          p_slug: string
+          p_token: string
+        }
+        Returns: string
       }
     }
     Enums: {

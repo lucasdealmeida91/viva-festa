@@ -178,12 +178,12 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** rota `/[tenantSlug]/[inviteToken]`; RPC `get_invite` (AD-5); geração do `invite_token` na confirmação; publicar/despublicar; mobile-first.
 **Aceite:** critério do PRD — resposta da RPC não contém lista de convidados, telefones nem status de terceiros (**teste de API**, não só UI).
 
-### [ ] M3-T4 — Fluxo de RSVP com acompanhantes
+### [x] M3-T4 — Fluxo de RSVP com acompanhantes
 **RNs:** RN-6.3, RN-6.7, RN-5.3.
 **Entregáveis:** RPCs `find_guest` + `submit_rsvp`; busca do próprio nome; confirmar/recusar; acompanhantes (nome + idade) entram como `guests origin=companion` no grupo do titular; alteração de resposta até o prazo.
 **Aceite:** critério do PRD — convidado confirma + 2 acompanhantes pelo celular e os totalizadores (gestor e cliente) refletem a classificação em tempo real.
 
-### [ ] M3-T5 — Modos de lista e prazo de RSVP
+### [x] M3-T5 — Modos de lista e prazo de RSVP
 **RNs:** RN-6.5, RN-6.6.
 **Entregáveis:** configuração por festa: lista fechada (padrão) / aberta (`origin=self_registered`); `rsvp_deadline`; após o prazo a página vira somente-informativa.
 **Aceite:** critério do PRD — após o prazo, nenhuma ação de confirmação é aceita (testar pela RPC, não só pela UI).
