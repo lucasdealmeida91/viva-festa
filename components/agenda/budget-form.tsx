@@ -11,6 +11,7 @@ type BudgetFormProps = {
   shifts: { id: string; label: string }[];
   defaultShiftId?: string;
   packages: { id: string; name: string }[];
+  customers: { id: string; name: string }[];
 };
 
 export function BudgetForm({
@@ -18,6 +19,7 @@ export function BudgetForm({
   shifts,
   defaultShiftId,
   packages,
+  customers,
 }: BudgetFormProps) {
   const [state, formAction, pending] = useActionState<BudgetFormState, FormData>(
     createBudget,
@@ -63,6 +65,21 @@ export function BudgetForm({
           {packages.map((pkg) => (
             <option key={pkg.id} value={pkg.id}>
               {pkg.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="budget-customer">Cliente (opcional)</Label>
+        <select
+          id="budget-customer"
+          name="customer_id"
+          className="border-input bg-transparent h-9 rounded-md border px-3 text-sm shadow-xs"
+        >
+          <option value="">Sem cliente por enquanto</option>
+          {customers.map((customer) => (
+            <option key={customer.id} value={customer.id}>
+              {customer.name}
             </option>
           ))}
         </select>

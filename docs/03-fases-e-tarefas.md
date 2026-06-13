@@ -154,7 +154,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** home financeira: a receber no mês, recebido no mês, vencidas (cliente, festa, dias de atraso).
 **Aceite:** critério do PRD — números batem com seed de cenários ([05-testes.md](05-testes.md)).
 
-### [ ] M2-T5 — Ficha do cliente
+### [x] M2-T5 — Ficha do cliente
 **RNs:** RN-10.2.
 **Entregáveis:** página do cliente com festas (passadas/futuras) e situação financeira consolidada.
 **Aceite:** critério do PRD — ficha consolidada correta para cliente com 2 festas em status distintos.

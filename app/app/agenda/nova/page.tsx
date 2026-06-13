@@ -13,14 +13,16 @@ export default async function NovaFestaPage({
   const { data: dateParam, turno } = await searchParams;
   const supabase = await createClient();
 
-  const [{ data: shifts }, { data: packages }] = await Promise.all([
-    supabase.from("shifts").select("id, label").eq("active", true),
-    supabase
-      .from("packages")
-      .select("id, name")
-      .eq("archived", false)
-      .order("name"),
-  ]);
+  const [{ data: shifts }, { data: packages }, { data: customers }] =
+    await Promise.all([
+      supabase.from("shifts").select("id, label").eq("active", true),
+      supabase
+        .from("packages")
+        .select("id, name")
+        .eq("archived", false)
+        .order("name"),
+      supabase.from("customers").select("id, name").order("name"),
+    ]);
 
   return (
     <main className="flex flex-col gap-6 p-6">
@@ -51,6 +53,7 @@ export default async function NovaFestaPage({
           shifts={shifts ?? []}
           defaultShiftId={turno}
           packages={packages ?? []}
+          customers={customers ?? []}
         />
       )}
     </main>

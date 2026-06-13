@@ -13,6 +13,7 @@ export async function createBudget(
   const partyDate = String(formData.get("party_date") ?? "");
   const shiftId = String(formData.get("shift_id") ?? "");
   const packageId = String(formData.get("package_id") ?? "");
+  const customerId = String(formData.get("customer_id") ?? "");
   const notes = String(formData.get("notes") ?? "").trim();
 
   if (!partyDate || !shiftId || !packageId) {
@@ -28,6 +29,7 @@ export async function createBudget(
     party_date: partyDate,
     shift_id: shiftId,
     package_id: packageId,
+    customer_id: customerId || null,
     notes: notes || null,
   });
   if (error) return { error: "Não foi possível criar o orçamento." };

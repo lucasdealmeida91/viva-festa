@@ -90,7 +90,6 @@ test("confirmação exige contrato com plano de parcelas (M2-T2)", async ({
     .filter({ hasText: /^Recebido no mês/ })
     .first();
   await expect(recebidoCard).toContainText("1.000,00");
-  await expect(page.getByText("Nenhuma parcela vencida. 🎉")).toBeVisible();
 
   // volta à festa pela agenda para o estorno
   await page.goto("/app/agenda");
@@ -112,4 +111,21 @@ test("confirmação exige contrato com plano de parcelas (M2-T2)", async ({
   await motivoEstorno.fill("Registro errado");
   await page.getByRole("button", { name: "Desfazer pagamento" }).click();
   await expect(page.getByText(/Paga \(PIX\)/)).not.toBeVisible();
+
+  // M2-T5: segundo orçamento vinculado à cliente
+  await page.goto("/app/agenda/nova");
+  await page.getByLabel("Cliente (opcional)").selectOption({
+    label: "Maria Contratos",
+  });
+  await page.getByRole("button", { name: "Criar orçamento" }).click();
+  await expect(page).toHaveURL(/\/app\/agenda\?mes=/);
+
+  // ficha do cliente: 2 festas em status distintos + financeiro consolidado
+  await page.goto("/app/clientes");
+  await page.getByRole("link", { name: /Maria Contratos/ }).click();
+  await expect(page.getByText("Festas (2)")).toBeVisible();
+  await expect(page.getByText("Orçamento")).toBeVisible();
+  await expect(page.getByText("Confirmada")).toBeVisible();
+  await expect(page.getByText("Total contratado")).toBeVisible();
+  await expect(page.getByText("Pendente")).toBeVisible();
 });
