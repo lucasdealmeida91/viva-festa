@@ -3,7 +3,8 @@
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { type AgeRules } from "@/lib/domain/classify";
+import { Label } from "@/components/ui/label";
+import { countByCategory, type AgeRules } from "@/lib/domain/classify";
 import { createClient } from "@/lib/supabase/browser";
 
 export type CheckinGuest = {
@@ -24,14 +25,19 @@ type CheckinBoardProps = {
 };
 
 export function CheckinBoard({
+  partyId,
   initialGuests,
   groups,
+  rules,
+  capacity,
   closed,
 }: CheckinBoardProps) {
   const supabase = createClient();
   const [guests, setGuests] = useState<CheckinGuest[]>(initialGuests);
   const [query, setQuery] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [walkinName, setWalkinName] = useState("");
+  const [walkinAge, setWalkinAge] = useState("");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -40,6 +46,21 @@ export function CheckinBoard({
   }, [guests, query]);
 
   const presentCount = guests.filter((g) => g.attendance === "present").length;
+
+  // RN-7.5 — painel: presentes por categoria vs. contratado.
+  const present = useMemo(
+    () =>
+      countByCategory(
+        guests.filter((g) => g.attendance === "present").map((g) => g.age),
+        rules,
+      ),
+    [guests, rules],
+  );
+  const panel: Array<{ label: string; got: number; cap?: number }> = [
+    { label: "Adultos", got: present.adults, cap: capacity.adults },
+    { label: "Crianças", got: present.children, cap: capacity.children },
+    { label: "Isentos", got: present.exempt },
+  ];
 
   function patch(ids: string[], present: boolean) {
     setGuests((prev) =>
@@ -67,26 +88,72 @@ export function CheckinBoard({
     }
   }
 
-  async function toggleGroup(groupId: string, present: boolean) {
+  async function toggleGroup(groupId: string, isPresent: boolean) {
     if (closed) return;
     const ids = guests.filter((g) => g.group_id === groupId).map((g) => g.id);
-    patch(ids, present);
+    patch(ids, isPresent);
     const { error: rpcError } = await supabase.rpc("checkin_group", {
       p_group_id: groupId,
-      p_present: present,
+      p_present: isPresent,
     });
     if (rpcError) {
-      patch(ids, !present);
+      patch(ids, !isPresent);
       setError("Falha ao marcar o grupo. Tente de novo.");
     } else {
       setError(null);
     }
   }
 
+  // RN-7.3 — walk-in: entra já presente.
+  async function addWalkin() {
+    if (closed || !walkinName.trim()) return;
+    const ageNum = walkinAge === "" ? null : Number(walkinAge);
+    const { data, error: rpcError } = await supabase.rpc("checkin_add_walkin", {
+      p_party_id: partyId,
+      p_name: walkinName.trim(),
+      p_age: ageNum ?? undefined,
+    });
+    if (rpcError || !data) {
+      setError("Falha ao adicionar walk-in. Tente de novo.");
+      return;
+    }
+    setGuests((prev) => [
+      ...prev,
+      {
+        id: data,
+        name: walkinName.trim(),
+        age: ageNum,
+        group_id: null,
+        attendance: "present",
+      },
+    ]);
+    setWalkinName("");
+    setWalkinAge("");
+    setError(null);
+  }
+
   return (
     <div className="flex flex-col gap-3">
-      <div className="bg-accent sticky top-0 rounded-md p-2 text-center text-sm font-medium">
-        Presentes: {presentCount} / {guests.length} convidados
+      <div className="bg-accent sticky top-0 z-10 flex flex-col gap-2 rounded-md p-2">
+        <p className="text-center text-sm font-medium">
+          Presentes: {presentCount} / {guests.length} convidados
+        </p>
+        <div className="flex justify-center gap-2">
+          {panel.map((cat) => {
+            const over = cat.cap !== undefined && cat.got >= cat.cap;
+            return (
+              <span
+                key={cat.label}
+                className={`rounded-md px-2 py-1 text-sm ${
+                  over ? "bg-destructive/15 text-destructive font-semibold" : "bg-background"
+                }`}
+              >
+                {cat.label} {cat.got}
+                {cat.cap !== undefined && `/${cat.cap}`}
+              </span>
+            );
+          })}
+        </div>
       </div>
 
       {error && (
@@ -154,6 +221,34 @@ export function CheckinBoard({
         <p className="text-muted-foreground text-center text-sm">
           Nenhum convidado encontrado.
         </p>
+      )}
+
+      {!closed && (
+        <div className="mt-2 flex flex-wrap items-end gap-2 rounded-md border border-dashed p-3">
+          <p className="w-full text-sm font-medium">Walk-in (sem convite)</p>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="walkin-name">Nome</Label>
+            <Input
+              id="walkin-name"
+              value={walkinName}
+              onChange={(e) => setWalkinName(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="walkin-age">Idade</Label>
+            <Input
+              id="walkin-age"
+              type="number"
+              min="0"
+              className="w-20"
+              value={walkinAge}
+              onChange={(e) => setWalkinAge(e.target.value)}
+            />
+          </div>
+          <Button type="button" onClick={addWalkin} disabled={!walkinName.trim()}>
+            Adicionar presente
+          </Button>
+        </div>
       )}
     </div>
   );

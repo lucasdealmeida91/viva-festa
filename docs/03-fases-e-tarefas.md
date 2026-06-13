@@ -201,7 +201,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** `/checkin`: lista de festas hoje/amanhã; busca instantânea por nome; marcar presente (1 toque); marcar grupo inteiro; desfazer; RLS do recepcionista validada.
 **Aceite:** uso com uma mão em viewport 390px; desfazer funciona até o encerramento.
 
-### [ ] M4-T2 — Walk-in e painel de contagem
+### [x] M4-T2 — Walk-in e painel de contagem
 **RNs:** RN-7.3, RN-7.5.
 **Entregáveis:** cadastro rápido walk-in (nome + idade) já `present`/`origin=walk_in`; painel fixo no topo: presentes vs. contratado por categoria, com alerta visual ao atingir/ultrapassar capacidade; Realtime para múltiplos dispositivos.
 **Aceite:** painel bate com as marcações em tempo real em 2 dispositivos.
