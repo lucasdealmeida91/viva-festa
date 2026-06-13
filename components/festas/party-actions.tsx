@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   cancelParty,
-  completeParty,
   reopenParty,
   reserveParty,
   type PartyActionState,
@@ -105,14 +104,7 @@ export function PartyActions({ id, status }: { id: string; status: Status }) {
           </p>
         </div>
       )}
-      {status === "confirmed" && (
-        <SimpleTransition
-          id={id}
-          action={completeParty}
-          label="Marcar como realizada"
-          note="O encerramento completo (check-in e excedente) chega no M4."
-        />
-      )}
+      {/* Encerramento (realizada) é feito pelo ClosingPanel (RN-8.1). */}
       {(status === "budget" || status === "reserved" || status === "confirmed") && (
         <ReasonTransition
           id={id}

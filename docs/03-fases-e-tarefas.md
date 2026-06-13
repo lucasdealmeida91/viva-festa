@@ -211,7 +211,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** fila de marcações com UI otimista, retry com backoff, indicador "N não sincronizadas" e reconciliação ao voltar a rede; documentar a limitação de refresh na própria UI de ajuda.
 **Aceite:** critério do PRD — derrubar a conexão no meio do check-in não perde marcação (e2e com `context.setOffline(true)`); estado de sincronização visível.
 
-### [ ] M4-T4 — Encerramento e cálculo do excedente
+### [x] M4-T4 — Encerramento e cálculo do excedente
 **RNs:** RN-8.1, RN-8.2, RN-8.4.
 **Entregáveis:** ação de encerrar (só gestor): ausentes em massa → `closing_snapshot` → cálculo via `lib/domain/overage` → status `completed`; tela de decisão do excedente (confirmar/ajustar com justificativa/dispensar) → `audit_logs`.
 **Aceite:** snapshot bate com o painel; decisão registrada com auditoria; festa encerrada imutável (RN-3.4).

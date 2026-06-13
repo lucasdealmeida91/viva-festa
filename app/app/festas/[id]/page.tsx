@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CaptureOnce } from "@/components/analytics/capture-once";
+import { ClosingPanel } from "@/components/festas/closing-panel";
 import { GuestList } from "@/components/festas/guest-list";
 import { InstallmentsList } from "@/components/festas/installments-list";
 import { InviteManager } from "@/components/festas/invite-manager";
@@ -39,6 +40,7 @@ export default async function FestaPage({
        rule_extra_child_price_cents,
        invite_token, invite_published, host_message, list_mode,
        rsvp_deadline, turning_age, birthday_child_id,
+       overage_adults, overage_children, overage_total_cents, overage_decision,
        packages (name, base_price_cents, adult_capacity, child_capacity,
          exempt_age, adult_age),
        shifts (label, starts_at, ends_at),
@@ -198,6 +200,19 @@ export default async function FestaPage({
             rsvpDeadline: party.rsvp_deadline,
           }}
           childOptions={party.customers?.birthday_children ?? []}
+        />
+      )}
+
+      {(party.status === "confirmed" || party.status === "completed") && (
+        <ClosingPanel
+          partyId={party.id}
+          status={party.status}
+          overage={{
+            adults: party.overage_adults,
+            children: party.overage_children,
+            totalCents: party.overage_total_cents,
+            decision: party.overage_decision,
+          }}
         />
       )}
 

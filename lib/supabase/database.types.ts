@@ -486,6 +486,8 @@ export type Database = {
       parties: {
         Row: {
           birthday_child_id: string | null
+          closing_snapshot: Json | null
+          completed_at: string | null
           created_at: string
           customer_id: string | null
           host_message: string | null
@@ -494,8 +496,13 @@ export type Database = {
           invite_token: string | null
           list_mode: Database["public"]["Enums"]["list_mode"]
           notes: string | null
+          overage_adults: number | null
+          overage_children: number | null
+          overage_decision: Database["public"]["Enums"]["overage_decision"]
+          overage_total_cents: number | null
           package_id: string
           party_date: string
+          report_shared_with_customer: boolean
           rsvp_deadline: string | null
           rule_adult_age: number | null
           rule_adult_capacity: number | null
@@ -511,6 +518,8 @@ export type Database = {
         }
         Insert: {
           birthday_child_id?: string | null
+          closing_snapshot?: Json | null
+          completed_at?: string | null
           created_at?: string
           customer_id?: string | null
           host_message?: string | null
@@ -519,8 +528,13 @@ export type Database = {
           invite_token?: string | null
           list_mode?: Database["public"]["Enums"]["list_mode"]
           notes?: string | null
+          overage_adults?: number | null
+          overage_children?: number | null
+          overage_decision?: Database["public"]["Enums"]["overage_decision"]
+          overage_total_cents?: number | null
           package_id: string
           party_date: string
+          report_shared_with_customer?: boolean
           rsvp_deadline?: string | null
           rule_adult_age?: number | null
           rule_adult_capacity?: number | null
@@ -536,6 +550,8 @@ export type Database = {
         }
         Update: {
           birthday_child_id?: string | null
+          closing_snapshot?: Json | null
+          completed_at?: string | null
           created_at?: string
           customer_id?: string | null
           host_message?: string | null
@@ -544,8 +560,13 @@ export type Database = {
           invite_token?: string | null
           list_mode?: Database["public"]["Enums"]["list_mode"]
           notes?: string | null
+          overage_adults?: number | null
+          overage_children?: number | null
+          overage_decision?: Database["public"]["Enums"]["overage_decision"]
+          overage_total_cents?: number | null
           package_id?: string
           party_date?: string
+          report_shared_with_customer?: boolean
           rsvp_deadline?: string | null
           rule_adult_age?: number | null
           rule_adult_capacity?: number | null
@@ -736,6 +757,16 @@ export type Database = {
         Args: { p_guest_id: string; p_present: boolean }
         Returns: undefined
       }
+      close_party: {
+        Args: {
+          p_overage_adults: number
+          p_overage_children: number
+          p_overage_total_cents: number
+          p_party_id: string
+          p_snapshot: Json
+        }
+        Returns: undefined
+      }
       confirm_party_with_contract: {
         Args: {
           p_customer_id: string
@@ -749,6 +780,15 @@ export type Database = {
       create_tenant: {
         Args: { p_name: string; p_slug: string }
         Returns: string
+      }
+      decide_overage: {
+        Args: {
+          p_amount_cents: number
+          p_decision: Database["public"]["Enums"]["overage_decision"]
+          p_party_id: string
+          p_reason: string
+        }
+        Returns: undefined
       }
       find_guest: {
         Args: { p_name: string; p_slug: string; p_token: string }
@@ -795,6 +835,7 @@ export type Database = {
       installment_kind: "down_payment" | "regular" | "overage"
       list_mode: "closed" | "open"
       membership_role: "manager" | "receptionist"
+      overage_decision: "pending" | "confirmed" | "adjusted" | "waived"
       party_status:
         | "budget"
         | "reserved"
@@ -944,6 +985,7 @@ export const Constants = {
       installment_kind: ["down_payment", "regular", "overage"],
       list_mode: ["closed", "open"],
       membership_role: ["manager", "receptionist"],
+      overage_decision: ["pending", "confirmed", "adjusted", "waived"],
       party_status: [
         "budget",
         "reserved",
