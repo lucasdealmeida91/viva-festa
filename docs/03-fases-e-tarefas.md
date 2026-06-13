@@ -163,12 +163,12 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 
 ## M3 — Convidados, convite digital e RSVP
 
-### [ ] M3-T1 — Convidados: schema e CRUD
+### [x] M3-T1 — Convidados: schema e CRUD
 **RNs:** RN-5.1, RN-5.2, RN-5.4.
 **Entregáveis:** migrations `guests` + `guest_groups` com RLS; CRUD de convidados na festa (gestor); congelamento da lista pós-encerramento.
 **Aceite:** classificação nunca digitável (campo não existe); lista congela após encerramento (teste de integração).
 
-### [ ] M3-T2 — Grupos e totalizadores
+### [x] M3-T2 — Grupos e totalizadores
 **RNs:** RN-5.3, RN-5.5, RN-4.3.
 **Entregáveis:** agrupamento por família/grupo; totalizadores contratado vs. esperado por categoria usando `lib/domain/classify`; destaque para convidado sem idade.
 **Aceite:** totalizadores corretos com o seed.

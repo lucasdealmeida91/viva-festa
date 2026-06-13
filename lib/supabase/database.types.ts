@@ -212,6 +212,128 @@ export type Database = {
           },
         ]
       }
+      guest_groups: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          party_id: string
+          tenant_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          party_id: string
+          tenant_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          party_id?: string
+          tenant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guest_groups_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guest_groups_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guests: {
+        Row: {
+          age: number | null
+          attendance: Database["public"]["Enums"]["attendance_status"] | null
+          checked_in_at: string | null
+          companion_of: string | null
+          created_at: string
+          group_id: string | null
+          id: string
+          name: string
+          note: string | null
+          origin: Database["public"]["Enums"]["guest_origin"]
+          party_id: string
+          phone: string | null
+          rsvp_status: Database["public"]["Enums"]["rsvp_status"]
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          age?: number | null
+          attendance?: Database["public"]["Enums"]["attendance_status"] | null
+          checked_in_at?: string | null
+          companion_of?: string | null
+          created_at?: string
+          group_id?: string | null
+          id?: string
+          name: string
+          note?: string | null
+          origin?: Database["public"]["Enums"]["guest_origin"]
+          party_id: string
+          phone?: string | null
+          rsvp_status?: Database["public"]["Enums"]["rsvp_status"]
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          age?: number | null
+          attendance?: Database["public"]["Enums"]["attendance_status"] | null
+          checked_in_at?: string | null
+          companion_of?: string | null
+          created_at?: string
+          group_id?: string | null
+          id?: string
+          name?: string
+          note?: string | null
+          origin?: Database["public"]["Enums"]["guest_origin"]
+          party_id?: string
+          phone?: string | null
+          rsvp_status?: Database["public"]["Enums"]["rsvp_status"]
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guests_companion_of_fkey"
+            columns: ["companion_of"]
+            isOneToOne: false
+            referencedRelation: "guests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guests_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "guest_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guests_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guests_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       installments: {
         Row: {
           amount_cents: number
@@ -600,6 +722,8 @@ export type Database = {
       }
     }
     Enums: {
+      attendance_status: "present" | "absent"
+      guest_origin: "host" | "companion" | "self_registered" | "walk_in"
       installment_kind: "down_payment" | "regular" | "overage"
       membership_role: "manager" | "receptionist"
       party_status:
@@ -608,6 +732,7 @@ export type Database = {
         | "confirmed"
         | "completed"
         | "canceled"
+      rsvp_status: "invited" | "confirmed" | "declined"
       subscription_status:
         | "trialing"
         | "active"
@@ -745,6 +870,8 @@ export const Constants = {
   },
   public: {
     Enums: {
+      attendance_status: ["present", "absent"],
+      guest_origin: ["host", "companion", "self_registered", "walk_in"],
       installment_kind: ["down_payment", "regular", "overage"],
       membership_role: ["manager", "receptionist"],
       party_status: [
@@ -754,6 +881,7 @@ export const Constants = {
         "completed",
         "canceled",
       ],
+      rsvp_status: ["invited", "confirmed", "declined"],
       subscription_status: [
         "trialing",
         "active",

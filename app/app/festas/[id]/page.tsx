@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CaptureOnce } from "@/components/analytics/capture-once";
+import { GuestList } from "@/components/festas/guest-list";
 import { InstallmentsList } from "@/components/festas/installments-list";
 import { PartyActions } from "@/components/festas/party-actions";
 import {
@@ -35,7 +36,8 @@ export default async function FestaPage({
        rule_exempt_age, rule_adult_age, rule_adult_capacity,
        rule_child_capacity, rule_extra_adult_price_cents,
        rule_extra_child_price_cents,
-       packages (name, base_price_cents, adult_capacity, child_capacity),
+       packages (name, base_price_cents, adult_capacity, child_capacity,
+         exempt_age, adult_age),
        shifts (label, starts_at, ends_at),
        customers (id, name),
        contracts (total_cents, down_payment_cents,
@@ -45,6 +47,29 @@ export default async function FestaPage({
     .single();
 
   if (!party) notFound();
+
+  const [{ data: guests }, { data: groups }] = await Promise.all([
+    supabase
+      .from("guests")
+      .select("id, name, age, group_id, rsvp_status, origin")
+      .eq("party_id", id)
+      .order("created_at"),
+    supabase
+      .from("guest_groups")
+      .select("id, name")
+      .eq("party_id", id)
+      .order("name"),
+  ]);
+
+  // Regras de classificação: congeladas se confirmada, senão as do pacote.
+  const ageRules = {
+    exemptAge: party.rule_exempt_age ?? party.packages!.exempt_age,
+    adultAge: party.rule_adult_age ?? party.packages!.adult_age,
+  };
+  const capacity = {
+    adults: party.rule_adult_capacity ?? party.packages!.adult_capacity,
+    children: party.rule_child_capacity ?? party.packages!.child_capacity,
+  };
 
   const frozen: FrozenRules | null =
     party.rule_adult_age !== null
@@ -133,6 +158,17 @@ export default async function FestaPage({
             partyId={party.id}
           />
         </section>
+      )}
+
+      {party.status !== "budget" && party.status !== "canceled" && (
+        <GuestList
+          partyId={party.id}
+          guests={guests ?? []}
+          groups={groups ?? []}
+          rules={ageRules}
+          capacity={capacity}
+          frozen={party.status === "completed"}
+        />
       )}
 
       <PartyActions id={party.id} status={party.status} />
