@@ -206,7 +206,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** cadastro rápido walk-in (nome + idade) já `present`/`origin=walk_in`; painel fixo no topo: presentes vs. contratado por categoria, com alerta visual ao atingir/ultrapassar capacidade; Realtime para múltiplos dispositivos.
 **Aceite:** painel bate com as marcações em tempo real em 2 dispositivos.
 
-### [ ] M4-T3 — Resiliência de rede (NF-3)
+### [x] M4-T3 — Resiliência de rede (NF-3)
 **RNs:** RN-7.6. **Decisão:** AD-4 (retry em memória).
 **Entregáveis:** fila de marcações com UI otimista, retry com backoff, indicador "N não sincronizadas" e reconciliação ao voltar a rede; documentar a limitação de refresh na própria UI de ajuda.
 **Aceite:** critério do PRD — derrubar a conexão no meio do check-in não perde marcação (e2e com `context.setOffline(true)`); estado de sincronização visível.

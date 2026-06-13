@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { countByCategory, type AgeRules } from "@/lib/domain/classify";
+import { retryWithBackoff } from "@/lib/checkin/retry";
 import { createClient } from "@/lib/supabase/browser";
 
 export type CheckinGuest = {
@@ -36,8 +37,23 @@ export function CheckinBoard({
   const [guests, setGuests] = useState<CheckinGuest[]>(initialGuests);
   const [query, setQuery] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(0);
   const [walkinName, setWalkinName] = useState("");
   const [walkinAge, setWalkinAge] = useState("");
+
+  // RN-7.6 — fila de retry em memória: a marcação otimista permanece e a
+  // sincronização tenta de novo em background; "N não sincronizadas" some
+  // quando tudo confirma. Não reverte em falha transitória (não perde marca).
+  async function sync(fn: () => Promise<{ error: unknown }>) {
+    setPending((n) => n + 1);
+    const result = await retryWithBackoff(fn);
+    setPending((n) => Math.max(0, n - 1));
+    if (!result.ok) {
+      setError("Algumas marcações não sincronizaram. Verifique a conexão.");
+    } else {
+      setError(null);
+    }
+  }
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -72,64 +88,57 @@ export function CheckinBoard({
     );
   }
 
-  async function toggleGuest(guest: CheckinGuest) {
+  function toggleGuest(guest: CheckinGuest) {
     if (closed) return;
     const present = guest.attendance !== "present";
-    patch([guest.id], present); // otimista (RN-7.6 — fila de retry vem no T3)
-    const { error: rpcError } = await supabase.rpc("checkin_set_present", {
-      p_guest_id: guest.id,
-      p_present: present,
+    patch([guest.id], present); // otimista
+    void sync(async () => {
+      const { error: e } = await supabase.rpc("checkin_set_present", {
+        p_guest_id: guest.id,
+        p_present: present,
+      });
+      return { error: e };
     });
-    if (rpcError) {
-      patch([guest.id], !present); // reverte
-      setError("Falha ao marcar. Tente de novo.");
-    } else {
-      setError(null);
-    }
   }
 
-  async function toggleGroup(groupId: string, isPresent: boolean) {
+  function toggleGroup(groupId: string, isPresent: boolean) {
     if (closed) return;
     const ids = guests.filter((g) => g.group_id === groupId).map((g) => g.id);
     patch(ids, isPresent);
-    const { error: rpcError } = await supabase.rpc("checkin_group", {
-      p_group_id: groupId,
-      p_present: isPresent,
+    void sync(async () => {
+      const { error: e } = await supabase.rpc("checkin_group", {
+        p_group_id: groupId,
+        p_present: isPresent,
+      });
+      return { error: e };
     });
-    if (rpcError) {
-      patch(ids, !isPresent);
-      setError("Falha ao marcar o grupo. Tente de novo.");
-    } else {
-      setError(null);
-    }
   }
 
-  // RN-7.3 — walk-in: entra já presente.
+  // RN-7.3 — walk-in: entra já presente. Também passa pela fila de retry.
   async function addWalkin() {
     if (closed || !walkinName.trim()) return;
+    const name = walkinName.trim();
     const ageNum = walkinAge === "" ? null : Number(walkinAge);
-    const { data, error: rpcError } = await supabase.rpc("checkin_add_walkin", {
-      p_party_id: partyId,
-      p_name: walkinName.trim(),
-      p_age: ageNum ?? undefined,
-    });
-    if (rpcError || !data) {
-      setError("Falha ao adicionar walk-in. Tente de novo.");
-      return;
-    }
-    setGuests((prev) => [
-      ...prev,
-      {
-        id: data,
-        name: walkinName.trim(),
-        age: ageNum,
-        group_id: null,
-        attendance: "present",
-      },
-    ]);
     setWalkinName("");
     setWalkinAge("");
-    setError(null);
+
+    let createdId: string | null = null;
+    await sync(async () => {
+      const { data, error: rpcError } = await supabase.rpc("checkin_add_walkin", {
+        p_party_id: partyId,
+        p_name: name,
+        p_age: ageNum ?? undefined,
+      });
+      if (!rpcError && data) createdId = data;
+      return { error: rpcError };
+    });
+
+    if (createdId) {
+      setGuests((prev) => [
+        ...prev,
+        { id: createdId!, name, age: ageNum, group_id: null, attendance: "present" },
+      ]);
+    }
   }
 
   return (
@@ -137,6 +146,16 @@ export function CheckinBoard({
       <div className="bg-accent sticky top-0 z-10 flex flex-col gap-2 rounded-md p-2">
         <p className="text-center text-sm font-medium">
           Presentes: {presentCount} / {guests.length} convidados
+        </p>
+        <p
+          className={`text-center text-xs ${
+            pending > 0 ? "text-amber-600" : "text-green-700"
+          }`}
+          aria-live="polite"
+        >
+          {pending > 0
+            ? `⟳ ${pending} ${pending === 1 ? "marcação não sincronizada" : "marcações não sincronizadas"}`
+            : "✓ tudo sincronizado"}
         </p>
         <div className="flex justify-center gap-2">
           {panel.map((cat) => {
