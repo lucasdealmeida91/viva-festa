@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChildrenManager } from "@/components/clientes/children-manager";
 import { CustomerForm } from "@/components/clientes/customer-form";
+import { MagicLinkButton } from "@/components/clientes/magic-link-button";
 import { consolidateFinance } from "@/lib/domain/financials";
 import {
   PARTY_STATUS_PT,
@@ -102,6 +103,7 @@ export default async function ClientePage({
       </section>
 
       <CustomerForm customer={customer} />
+      <MagicLinkButton customerId={customer.id} />
       <ChildrenManager
         customerId={customer.id}
         childrenList={customer.birthday_children ?? []}

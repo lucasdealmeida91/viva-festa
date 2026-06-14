@@ -3,13 +3,9 @@ import { updateSession } from "@/lib/supabase/proxy";
 
 // Optimistic guards only (per Next.js auth guidance): pages re-check data
 // access via RLS. Public invite routes (/[slug]/[token]) match no prefix.
-const PROTECTED_PREFIXES = [
-  "/app",
-  "/checkin",
-  "/cliente",
-  "/admin",
-  "/onboarding",
-];
+// /cliente fica fora: o magic link chega com a sessão no fragmento da URL
+// (processado no cliente), e a própria página se autoguarda (RN-12.1).
+const PROTECTED_PREFIXES = ["/app", "/checkin", "/admin", "/onboarding"];
 const AUTH_PAGES = ["/login", "/cadastro"];
 
 export async function proxy(request: NextRequest) {

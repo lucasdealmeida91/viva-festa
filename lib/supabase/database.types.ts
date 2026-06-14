@@ -817,6 +817,7 @@ export type Database = {
           turning_age: number
         }[]
       }
+      link_customer_account: { Args: never; Returns: string }
       submit_rsvp: {
         Args: {
           p_companions?: Json

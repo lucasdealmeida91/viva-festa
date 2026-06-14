@@ -229,7 +229,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 
 ## M5 — Espaço do cliente, recompra e assinatura
 
-### [ ] M5-T1 — Magic link: acesso do cliente final
+### [x] M5-T1 — Magic link: acesso do cliente final
 **RNs:** RN-12.1.
 **Entregáveis:** envio de magic link pelo gestor; vínculo `customers.auth_user_id` no primeiro acesso; guard de `/cliente`; políticas RLS do papel cliente final.
 **Aceite:** cliente entra apenas pelo link; `/cliente` sem sessão redireciona; RLS do papel validada no harness de isolamento.

@@ -8,9 +8,9 @@ export default defineConfig({
   reporter: "list",
   timeout: 60_000,
   expect: { timeout: 15_000 },
-  // Um único servidor atende todos os testes: limitar workers evita
-  // contenção de signups/navegação simultâneos.
-  workers: 4,
+  // Um único servidor + GoTrue local degradam sob muitos signups paralelos;
+  // 2 workers mantém a suite estável (local e CI).
+  workers: 2,
   use: {
     baseURL: "http://localhost:3000",
     trace: "on-first-retry",
