@@ -642,6 +642,68 @@ export type Database = {
         }
         Relationships: []
       }
+      rebooking_alerts: {
+        Row: {
+          alert_date: string
+          birthday_child_id: string
+          converted_party_id: string | null
+          created_at: string
+          id: string
+          source_party_id: string
+          status: Database["public"]["Enums"]["rebooking_status"]
+          tenant_id: string
+        }
+        Insert: {
+          alert_date: string
+          birthday_child_id: string
+          converted_party_id?: string | null
+          created_at?: string
+          id?: string
+          source_party_id: string
+          status?: Database["public"]["Enums"]["rebooking_status"]
+          tenant_id: string
+        }
+        Update: {
+          alert_date?: string
+          birthday_child_id?: string
+          converted_party_id?: string | null
+          created_at?: string
+          id?: string
+          source_party_id?: string
+          status?: Database["public"]["Enums"]["rebooking_status"]
+          tenant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rebooking_alerts_birthday_child_id_fkey"
+            columns: ["birthday_child_id"]
+            isOneToOne: false
+            referencedRelation: "birthday_children"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rebooking_alerts_converted_party_id_fkey"
+            columns: ["converted_party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rebooking_alerts_source_party_id_fkey"
+            columns: ["source_party_id"]
+            isOneToOne: true
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rebooking_alerts_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shifts: {
         Row: {
           active: boolean
@@ -844,6 +906,7 @@ export type Database = {
         | "confirmed"
         | "completed"
         | "canceled"
+      rebooking_status: "pending" | "dismissed" | "converted"
       rsvp_status: "invited" | "confirmed" | "declined"
       subscription_status:
         | "trialing"
@@ -995,6 +1058,7 @@ export const Constants = {
         "completed",
         "canceled",
       ],
+      rebooking_status: ["pending", "dismissed", "converted"],
       rsvp_status: ["invited", "confirmed", "declined"],
       subscription_status: [
         "trialing",

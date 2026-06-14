@@ -239,7 +239,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** `/cliente`: dados da festa; gestão da lista (edição até o início da festa); RSVPs em tempo real com totalizadores; copiar/compartilhar link do convite; parcelas (leitura); relatório pós-festa quando liberado pelo gestor.
 **Aceite:** critério do PRD — cliente não vê nada além do permitido em RN-12.3 (teste de RLS por papel).
 
-### [ ] M5-T3 — Alertas de recompra
+### [x] M5-T3 — Alertas de recompra
 **RNs:** RN-10.3–10.5.
 **Entregáveis:** geração do alerta no encerramento (90 dias antes do aniversário seguinte — mês/ano); card na home do gestor; botão `wa.me` com mensagem-modelo do tenant (placeholders); "criar orçamento" pré-preenchido marca `converted`; "dispensar".
 **Aceite:** critério do PRD — festa realizada gera alerta na data certa com mensagem correta (teste com clock controlado).
