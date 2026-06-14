@@ -781,6 +781,7 @@ export type Database = {
         Args: { p_name: string; p_slug: string }
         Returns: string
       }
+      customer_invite_path: { Args: { p_party_id: string }; Returns: string }
       decide_overage: {
         Args: {
           p_amount_cents: number

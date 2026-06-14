@@ -234,7 +234,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** envio de magic link pelo gestor; vínculo `customers.auth_user_id` no primeiro acesso; guard de `/cliente`; políticas RLS do papel cliente final.
 **Aceite:** cliente entra apenas pelo link; `/cliente` sem sessão redireciona; RLS do papel validada no harness de isolamento.
 
-### [ ] M5-T2 — Espaço do cliente: telas
+### [x] M5-T2 — Espaço do cliente: telas
 **RNs:** RN-12.2, RN-12.3, RN-5.4.
 **Entregáveis:** `/cliente`: dados da festa; gestão da lista (edição até o início da festa); RSVPs em tempo real com totalizadores; copiar/compartilhar link do convite; parcelas (leitura); relatório pós-festa quando liberado pelo gestor.
 **Aceite:** critério do PRD — cliente não vê nada além do permitido em RN-12.3 (teste de RLS por papel).

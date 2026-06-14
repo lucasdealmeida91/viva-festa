@@ -42,13 +42,49 @@ test("cliente final acessa por magic link e vê só a própria festa (M5-T1)", a
   await page.getByRole("button", { name: "Criar buffet" }).click();
   await expect(page).toHaveURL(/\/app(\?.*)?$/);
 
+  // turno + pacote + cliente + festa confirmada (para o espaço do cliente)
+  await page.goto("/app/configuracoes");
+  await page.getByLabel("Nome do turno").fill("Sábado tarde");
+  await page.getByLabel("Dia da semana").selectOption("6");
+  await page.getByLabel("Início").fill("12:00");
+  await page.getByLabel("Fim").fill("16:00");
+  await page.getByRole("button", { name: "Adicionar turno" }).click();
+  await expect(page.getByText("Turno criado.")).toBeVisible();
+
+  await page.goto("/app/pacotes");
+  await page.getByLabel("Nome", { exact: true }).fill("Festa Top");
+  await page.getByLabel("Adultos").fill("50");
+  await page.getByLabel("Crianças").fill("30");
+  await page.getByLabel("Preço base (R$)").fill("5500.00");
+  await page.getByLabel("Idade de isenção").fill("8");
+  await page.getByLabel("Idade de adulto").fill("13");
+  await page.getByLabel("Adulto excedente (R$)").fill("90.00");
+  await page.getByLabel("Criança excedente (R$)").fill("55.00");
+  await page.getByRole("button", { name: "Criar pacote" }).click();
+  await expect(page.getByText("Pacote criado.")).toBeVisible();
+
   await page.goto("/app/clientes");
   await page.getByLabel("Nome", { exact: true }).fill("Cliente Acesso");
   await page.getByLabel("E-mail").fill(clientEmail);
   await page.getByRole("button", { name: "Cadastrar cliente" }).click();
   await expect(page).toHaveURL(/\/app\/clientes\/[\w-]+$/);
 
+  await page.goto("/app/agenda");
+  // próximo mês: garante um sábado futuro (lista editável pelo cliente)
+  await page.getByRole("link", { name: "Próximo mês" }).click();
+  await page.getByRole("link", { name: /Sábado tarde .* Livre/ }).first().click();
+  await page.getByLabel("Cliente (opcional)").selectOption({ label: "Cliente Acesso" });
+  await page.getByRole("button", { name: "Criar orçamento" }).click();
+  await page.getByRole("link", { name: /Sábado tarde .* Orçamento/ }).first().click();
+  await page.getByRole("button", { name: "Reservar data" }).click();
+  await page.getByRole("link", { name: "Confirmar festa" }).click();
+  await page.getByLabel("Cliente").selectOption({ label: "Cliente Acesso" });
+  await page.getByRole("button", { name: "Confirmar festa com contrato" }).click();
+  await expect(page.getByText("Status:")).toContainText("Confirmada");
+
   // envia o magic link
+  await page.goto(`/app/clientes`);
+  await page.getByRole("link", { name: /Cliente Acesso/ }).click();
   await page
     .getByRole("button", { name: /Enviar acesso ao cliente/ })
     .click();
@@ -65,4 +101,14 @@ test("cliente final acessa por magic link e vê só a própria festa (M5-T1)", a
   await expect(page).toHaveURL(/\/cliente/);
   await expect(page.getByRole("heading", { name: /Olá/ })).toBeVisible();
   await expect(page.getByText("Minhas festas")).toBeVisible();
+
+  // M5-T2: abre a festa e vê o próprio espaço (a edição da lista é coberta
+  // pelos testes de integração customer-edit.test.ts)
+  await page.getByRole("link", { name: /Festa de/ }).first().click();
+  await expect(page).toHaveURL(/\/cliente\/[\w-]+$/);
+  await expect(page.getByRole("heading", { name: /Festa de/ })).toBeVisible();
+  await expect(page.getByText("confirmados vs. contratado")).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Pagamentos (somente leitura)" }),
+  ).toBeVisible();
 });

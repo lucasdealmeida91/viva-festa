@@ -94,9 +94,10 @@ describe("acesso do cliente final (RN-12.3)", () => {
     expect(customers!.map((c) => c.name)).toEqual(["Eu Cliente"]);
   });
 
-  it("não acessa agenda/configuração via outras tabelas (sem papel de staff)", async () => {
+  it("não acessa configuração do buffet (sem papel de staff)", async () => {
     const cli = await signInAs(clientEmail);
-    const { data: shifts } = await cli.from("shifts").select("id");
-    expect(shifts).toEqual([]); // sem policy de cliente em shifts
+    // pacotes não têm policy de cliente: configuração comercial fica oculta
+    const { data: packages } = await cli.from("packages").select("id");
+    expect(packages).toEqual([]);
   });
 });
