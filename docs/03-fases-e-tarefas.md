@@ -254,7 +254,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** `/api/webhooks/stripe` atualiza `subscription_status`; retentativas do Stripe → `past_due` → `read_only` após 10 dias; regularização volta a `active` imediatamente.
 **Aceite:** ciclo `trialing → active → past_due → read_only → active` simulado com Stripe CLI/test clocks.
 
-### [ ] M5-T6 — Modo leitura e ciclo de bloqueio
+### [x] M5-T6 — Modo leitura e ciclo de bloqueio
 **RNs:** RN-11.1 (aviso de trial), RN-11.2.
 **Entregáveis:** `tenant_is_writable` (AD-3) cobrindo trial expirado → 30 dias leitura → bloqueio → retenção 6 meses; aviso persistente faltando 3 dias de trial; banners de estado na UI; e-mails do ciclo (template mínimo).
 **Aceite:** critério do PRD — trial expirado entra em modo leitura (escrita falha **no banco**); assinou, volta ao normal sem perda.
