@@ -65,6 +65,24 @@ export default async function AssinaturaPage() {
       <p className="text-muted-foreground text-sm">
         O pagamento por cartão (Stripe) será habilitado em breve (M5-T4).
       </p>
+
+      <section className="flex flex-col gap-2">
+        <h2 className="text-lg font-semibold">Exportar dados (CSV)</h2>
+        <p className="text-muted-foreground text-sm">
+          Portabilidade: baixe seus dados a qualquer momento (RN-11.4).
+        </p>
+        <div className="flex flex-wrap gap-3 text-sm">
+          {["clientes", "festas", "convidados", "parcelas"].map((entity) => (
+            <a
+              key={entity}
+              href={`/api/export?entity=${entity}`}
+              className="rounded-md border px-3 py-1.5 underline"
+            >
+              {entity}.csv
+            </a>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }

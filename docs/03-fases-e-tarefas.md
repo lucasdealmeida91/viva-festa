@@ -259,7 +259,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** `tenant_is_writable` (AD-3) cobrindo trial expirado → 30 dias leitura → bloqueio → retenção 6 meses; aviso persistente faltando 3 dias de trial; banners de estado na UI; e-mails do ciclo (template mínimo).
 **Aceite:** critério do PRD — trial expirado entra em modo leitura (escrita falha **no banco**); assinou, volta ao normal sem perda.
 
-### [ ] M5-T7 — Exportação CSV e cancelamento
+### [x] M5-T7 — Exportação CSV (cancelamento self-service vem com Stripe T4/T5)
 **RNs:** RN-11.4.
 **Entregáveis:** exportação CSV (clientes, festas, convidados, parcelas) disponível sempre; cancelamento self-service efetivo no fim do período pago.
 **Aceite:** critério do PRD — CSVs legíveis e completos contra o seed.
