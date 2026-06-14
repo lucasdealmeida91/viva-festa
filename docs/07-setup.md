@@ -19,7 +19,7 @@ Contas/serviços (uma vez, pelo fundador):
 | Vercel | Projeto ligado ao repo GitHub | F0-T1 |
 | Sentry | Projeto Next.js — ✅ criado (org `o4511550096932864`) | F0-T5 |
 | PostHog | ✅ Projeto **466868** (org dedicada VivaFesta, US Cloud) | F0-T6 |
-| Stripe | Conta + produtos: mensal R$ 197, anual R$ 1.970 | M5-T4 |
+| Stripe | ✅ Conta + produto/preços de **teste** criados (ver §6) | M5-T4 |
 | Domínio | `vivafesta.com.br` (pendência D-4 do PRD) | Antes do M3 (URLs públicas do convite) |
 
 ## 2. Subir o ambiente local
@@ -75,8 +75,18 @@ npm run test:e2e          # Playwright (exige app + supabase rodando)
 
 ## 6. Stripe em dev (a partir do M5)
 
+Conta autenticada no Stripe CLI (`stripe login` já feito). **Produto e preços de
+teste já criados** (14/06/2026) — usar estes IDs no checkout do M5-T4:
+
+| Item | ID (test mode) | Valor |
+|---|---|---|
+| Produto | `prod_UhTcHtzUQ9uLqg` | VivaFesta |
+| Preço mensal | `price_1Ti4fKRnvjKjE69eM5COMF3L` | R$ 197,00/mês |
+| Preço anual | `price_1Ti4hERnvjKjE69eiECsit9g` | R$ 1.970,00/ano |
+
+Conta de teste: `acct_1TOJGaRnvjKjE69e`. IDs de teste não são segredo.
+
 ```bash
-stripe login
 stripe listen --forward-to localhost:3000/api/webhooks/stripe   # imprime o STRIPE_WEBHOOK_SECRET local
 stripe trigger customer.subscription.updated                    # simular eventos
 ```
