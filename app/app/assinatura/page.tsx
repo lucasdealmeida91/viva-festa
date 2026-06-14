@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CheckoutButtons } from "@/components/assinatura/checkout-buttons";
 import { computeSubscription, type SubscriptionStatus } from "@/lib/domain/subscription";
 import { todayInSaoPaulo } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
@@ -49,22 +50,10 @@ export default async function AssinaturaPage() {
         )}
       </section>
 
-      <section className="flex flex-wrap gap-4">
-        <div className="w-56 rounded-md border p-4">
-          <h2 className="font-semibold">Mensal</h2>
-          <p className="text-2xl font-semibold">R$ 197</p>
-          <p className="text-muted-foreground text-sm">por mês</p>
-        </div>
-        <div className="w-56 rounded-md border p-4">
-          <h2 className="font-semibold">Anual</h2>
-          <p className="text-2xl font-semibold">R$ 1.970</p>
-          <p className="text-muted-foreground text-sm">por ano (2 meses grátis)</p>
-        </div>
-      </section>
-
-      <p className="text-muted-foreground text-sm">
-        O pagamento por cartão (Stripe) será habilitado em breve (M5-T4).
-      </p>
+      {view?.mode !== "active" && <CheckoutButtons />}
+      {view?.mode === "active" && (
+        <p className="text-sm text-green-700">Assinatura ativa. Obrigado! 🎉</p>
+      )}
 
       <section className="flex flex-col gap-2">
         <h2 className="text-lg font-semibold">Exportar dados (CSV)</h2>

@@ -244,12 +244,12 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** geração do alerta no encerramento (90 dias antes do aniversário seguinte — mês/ano); card na home do gestor; botão `wa.me` com mensagem-modelo do tenant (placeholders); "criar orçamento" pré-preenchido marca `converted`; "dispensar".
 **Aceite:** critério do PRD — festa realizada gera alerta na data certa com mensagem correta (teste com clock controlado).
 
-### [ ] M5-T4 — Stripe: checkout da assinatura
+### [x] M5-T4 — Stripe: checkout da assinatura
 **RNs:** RN-11.1. **Decisão:** AD-6 (billing isolado).
 **Entregáveis:** `lib/billing/` (interface + implementação Stripe); produtos mensal R$ 197 / anual R$ 1.970; Stripe Checkout a partir do app; páginas de retorno (sucesso/cancelado).
 **Aceite:** assinatura de teste completa via Checkout em modo test, refletida em `tenants`.
 
-### [ ] M5-T5 — Stripe: webhook e estados da assinatura
+### [x] M5-T5 — Stripe: webhook e estados da assinatura
 **RNs:** RN-11.3.
 **Entregáveis:** `/api/webhooks/stripe` atualiza `subscription_status`; retentativas do Stripe → `past_due` → `read_only` após 10 dias; regularização volta a `active` imediatamente.
 **Aceite:** ciclo `trialing → active → past_due → read_only → active` simulado com Stripe CLI/test clocks.
