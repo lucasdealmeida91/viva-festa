@@ -275,7 +275,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 ### [x] M6-T1 — Cadastro de itens pelo cliente final
 **RNs:** RN-13.1. Itens com nome + link externo no espaço do cliente.
 
-### [ ] M6-T2 — Escolha pelo convidado
+### [x] M6-T2 — Escolha pelo convidado
 **RNs:** RN-13.2, RN-13.3. RPC `claim_gift`; item escolhido some da lista pública; anfitrião vê quem escolheu. Sem pagamento/PIX.
 
 ---

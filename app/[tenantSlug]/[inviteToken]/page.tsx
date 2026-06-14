@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { GiftList } from "@/components/convite/gift-list";
 import { RsvpForm } from "@/components/convite/rsvp-form";
 import { formatDateBR, formatTime } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
@@ -57,6 +58,8 @@ export default async function ConvitePage({ params }: ConvitePageProps) {
           O prazo de confirmação encerrou.
         </p>
       )}
+
+      <GiftList slug={tenantSlug} token={inviteToken} />
     </main>
   );
 }

@@ -871,6 +871,15 @@ export type Database = {
         Args: { p_guest_id: string; p_present: boolean }
         Returns: undefined
       }
+      claim_gift: {
+        Args: {
+          p_gift_id: string
+          p_guest_name: string
+          p_slug: string
+          p_token: string
+        }
+        Returns: undefined
+      }
       close_party: {
         Args: {
           p_overage_adults: number
@@ -933,6 +942,14 @@ export type Database = {
         }[]
       }
       link_customer_account: { Args: never; Returns: string }
+      list_gifts: {
+        Args: { p_slug: string; p_token: string }
+        Returns: {
+          external_url: string
+          id: string
+          name: string
+        }[]
+      }
       submit_rsvp: {
         Args: {
           p_companions?: Json
