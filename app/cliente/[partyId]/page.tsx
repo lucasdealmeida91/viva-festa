@@ -36,6 +36,12 @@ type Installment = {
   amount_cents: number;
   paid_at: string | null;
 };
+type Gift = {
+  id: string;
+  name: string;
+  external_url: string | null;
+  guests: { name: string } | null;
+};
 
 const RSVP_PT: Record<string, string> = {
   invited: "Convidado",
@@ -58,6 +64,9 @@ export default function ClientePartyPage({
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [copied, setCopied] = useState(false);
+  const [gifts, setGifts] = useState<Gift[]>([]);
+  const [giftName, setGiftName] = useState("");
+  const [giftUrl, setGiftUrl] = useState("");
 
   const load = useCallback(async () => {
     const { data: p } = await supabase
@@ -94,6 +103,13 @@ export default function ClientePartyPage({
       p_party_id: partyId,
     });
     setInviteLink(path ? `${window.location.origin}/${path}` : null);
+
+    const { data: giftRows } = await supabase
+      .from("gift_items")
+      .select("id, name, external_url, guests:claimed_by_guest_id (name)")
+      .eq("party_id", partyId)
+      .order("created_at");
+    setGifts((giftRows ?? []) as Gift[]);
     setState("ok");
   }, [supabase, partyId]);
 
@@ -133,6 +149,31 @@ export default function ClientePartyPage({
 
   async function removeGuest(id: string) {
     await supabase.from("guests").delete().eq("id", id);
+    await load();
+  }
+
+  async function addGift(e: React.FormEvent) {
+    e.preventDefault();
+    if (!party || !giftName.trim()) return;
+    const { data: tenantRow } = await supabase
+      .from("parties")
+      .select("tenant_id")
+      .eq("id", partyId)
+      .single();
+    if (!tenantRow) return;
+    await supabase.from("gift_items").insert({
+      tenant_id: tenantRow.tenant_id,
+      party_id: partyId,
+      name: giftName.trim(),
+      external_url: giftUrl.trim() || null,
+    });
+    setGiftName("");
+    setGiftUrl("");
+    await load();
+  }
+
+  async function removeGift(id: string) {
+    await supabase.from("gift_items").delete().eq("id", id);
     await load();
   }
 
@@ -273,6 +314,75 @@ export default function ClientePartyPage({
           <p className="text-muted-foreground text-sm">
             A lista não pode mais ser editada.
           </p>
+        )}
+      </section>
+
+      <section className="flex flex-col gap-2">
+        <h2 className="text-lg font-semibold">Lista de presentes</h2>
+        {gifts.length > 0 && (
+          <ul className="flex flex-col gap-1 text-sm">
+            {gifts.map((gift) => (
+              <li
+                key={gift.id}
+                className="flex items-center justify-between rounded-md border p-2"
+              >
+                <span>
+                  {gift.external_url ? (
+                    <a
+                      href={gift.external_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="underline"
+                    >
+                      {gift.name}
+                    </a>
+                  ) : (
+                    gift.name
+                  )}
+                  {gift.guests && (
+                    <span className="text-green-700">
+                      {" "}
+                      · escolhido por {gift.guests.name}
+                    </span>
+                  )}
+                </span>
+                {editable && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeGift(gift.id)}
+                  >
+                    Remover
+                  </Button>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+        {editable && (
+          <form onSubmit={addGift} className="flex flex-wrap items-end gap-2">
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="gift-name">Presente</Label>
+              <Input
+                id="gift-name"
+                value={giftName}
+                onChange={(e) => setGiftName(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="gift-url">Link (opcional)</Label>
+              <Input
+                id="gift-url"
+                value={giftUrl}
+                onChange={(e) => setGiftUrl(e.target.value)}
+                placeholder="https://…"
+              />
+            </div>
+            <Button type="submit" disabled={!giftName.trim()}>
+              Adicionar
+            </Button>
+          </form>
         )}
       </section>
 

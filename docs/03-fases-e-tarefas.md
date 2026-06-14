@@ -272,7 +272,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 
 ## M6 — (Opcional) Lista de presentes
 
-### [ ] M6-T1 — Cadastro de itens pelo cliente final
+### [x] M6-T1 — Cadastro de itens pelo cliente final
 **RNs:** RN-13.1. Itens com nome + link externo no espaço do cliente.
 
 ### [ ] M6-T2 — Escolha pelo convidado

@@ -212,6 +212,58 @@ export type Database = {
           },
         ]
       }
+      gift_items: {
+        Row: {
+          claimed_by_guest_id: string | null
+          created_at: string
+          external_url: string | null
+          id: string
+          name: string
+          party_id: string
+          tenant_id: string
+        }
+        Insert: {
+          claimed_by_guest_id?: string | null
+          created_at?: string
+          external_url?: string | null
+          id?: string
+          name: string
+          party_id: string
+          tenant_id: string
+        }
+        Update: {
+          claimed_by_guest_id?: string | null
+          created_at?: string
+          external_url?: string | null
+          id?: string
+          name?: string
+          party_id?: string
+          tenant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_items_claimed_by_guest_id_fkey"
+            columns: ["claimed_by_guest_id"]
+            isOneToOne: false
+            referencedRelation: "guests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gift_items_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gift_items_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       guest_groups: {
         Row: {
           created_at: string
