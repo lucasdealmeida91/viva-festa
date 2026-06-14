@@ -264,7 +264,7 @@ Cada tarefa foi dimensionada para caber em **uma sessão de agente com contexto 
 **Entregáveis:** exportação CSV (clientes, festas, convidados, parcelas) disponível sempre; cancelamento self-service efetivo no fim do período pago.
 **Aceite:** critério do PRD — CSVs legíveis e completos contra o seed.
 
-### [ ] M5-T8 — Painel admin mínimo da plataforma
+### [x] M5-T8 — Painel admin mínimo da plataforma
 **Entregáveis:** `/admin` (service role): lista de tenants, status de assinatura, métricas básicas de uso.
 **Aceite:** fundador enxerga a base; nenhum acesso para não-admin (teste).
 
