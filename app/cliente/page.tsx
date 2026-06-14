@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { formatDateBR } from "@/lib/format";
 import { createClient } from "@/lib/supabase/browser";
 

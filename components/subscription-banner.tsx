@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   computeSubscription,
   type SubscriptionStatus,
@@ -29,9 +30,9 @@ export function SubscriptionBanner({
       className={`flex items-center justify-between gap-3 px-4 py-2 text-sm ${tone}`}
     >
       <span>{view.message}</span>
-      <a href="/app/assinatura" className="font-medium underline">
+      <Link href="/app/assinatura" className="font-medium underline">
         Assinar
-      </a>
+      </Link>
     </div>
   );
 }
